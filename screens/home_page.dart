@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:smart_shopping_list/screens/ingredients.dart';
-import 'package:smart_shopping_list/screens/recipes.dart';
+import 'package:smart_shopping_list/screens/ingredients_page.dart';
+import 'package:smart_shopping_list/screens/recipes_page.dart';
 import 'package:smart_shopping_list/screens/shopping_list.dart';
 
 class HomePage extends StatefulWidget {
@@ -16,8 +16,8 @@ class _HomePageState extends State<HomePage> {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
     ShoppingList(),
-    Recipes(),
-    Ingredients(),
+    RecipesPage(),
+    IngredientsPage(),
   ];
 
   void _onItemTapped(int index) {

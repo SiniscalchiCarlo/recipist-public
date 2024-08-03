@@ -1,5 +1,8 @@
+import 'dart:core';
+
 class Ingredient {
   String name;
-
-  Ingredient({required this.name});
+  double quantity;
+  String? unit;
+  Ingredient({required this.name, required this.quantity, required this.unit});
 }
