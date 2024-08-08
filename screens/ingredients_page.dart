@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:smart_shopping_list/styling/my_text.dart';
 
 class IngredientsPage extends StatefulWidget {
   const IngredientsPage({super.key});
@@ -12,12 +12,7 @@ class _IngredientsPageState extends State<IngredientsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-            title: Text('Ingredients',
-                style: GoogleFonts.dmSerifText(
-                  fontSize: 48,
-                  color: Theme.of(context).colorScheme.inversePrimary,
-                ))),
+        appBar: AppBar(title: MyText(text: "Ingredients", size: 48)),
         backgroundColor: Theme.of(context).colorScheme.surface,
         body: Text('body'));
   }

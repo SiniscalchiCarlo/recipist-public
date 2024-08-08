@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:smart_shopping_list/components/recipe_card.dart';
+import 'package:smart_shopping_list/styling/my_action_button.dart';
+import 'package:smart_shopping_list/styling/my_card.dart';
+import 'package:smart_shopping_list/styling/my_text.dart';
 import 'package:smart_shopping_list/data.dart';
+import 'package:smart_shopping_list/screens/edit_recipe.dart';
 
 class RecipesPage extends StatefulWidget {
   const RecipesPage({super.key});
@@ -11,20 +13,40 @@ class RecipesPage extends StatefulWidget {
 }
 
 class _RecipesPageState extends State<RecipesPage> {
+  void addRecipe() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditRecipe(recipe: null),
+      ),
+    );
+    if (result != null) {}
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text('Recipes',
-              style: GoogleFonts.dmSerifText(
-                fontSize: 48,
-                color: Theme.of(context).colorScheme.inversePrimary,
-              ))),
+          title: MyText(
+        text: "Recipes",
+        size: 48,
+      )),
       backgroundColor: Theme.of(context).colorScheme.surface,
+      floatingActionButton: MyActionButton(
+        onPressed: addRecipe,
+      ),
       body: ListView.builder(
           itemCount: recipes.length,
           itemBuilder: (BuildContext context, int index) {
-            return RecipeCard();
+            return MyCard(
+              child: Row(
+                children: [
+                  Icon(Icons.image),
+                  SizedBox(width: 10),
+                  MyText(text: recipes[index].name, size: 20)
+                ],
+              ),
+            );
           }),
     );
   }

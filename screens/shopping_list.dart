@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:smart_shopping_list/styling/my_text.dart';
 
 class ShoppingList extends StatefulWidget {
   const ShoppingList({super.key});
@@ -13,11 +13,10 @@ class _ShoppingListState extends State<ShoppingList> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            title: Text('Shopping List',
-                style: GoogleFonts.dmSerifText(
-                  fontSize: 48,
-                  color: Theme.of(context).colorScheme.inversePrimary,
-                ))),
+            title: MyText(
+          text: "List",
+          size: 48,
+        )),
         backgroundColor: Theme.of(context).colorScheme.surface,
         body: Text('body'));
   }
