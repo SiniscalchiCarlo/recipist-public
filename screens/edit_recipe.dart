@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_shopping_list/components/personsCounter.dart';
+import 'package:smart_shopping_list/styling/my_counter.dart';
 import 'package:smart_shopping_list/components/recipeIngredient.dart';
 import 'package:smart_shopping_list/models/Ingredient.dart';
 import 'package:smart_shopping_list/styling/my_action_button.dart';
@@ -125,9 +125,13 @@ class _EditRecipeState extends State<EditRecipe> {
               SizedBox(
                 width: 20,
               ),
-              Personscounter(
-                onPressed: setPersons,
+              MyCounter(
+                size: 30,
+                onPressed: (value) => setState(() {
+                  newRecipe.nperson = value;
+                }),
                 startValue: newRecipe.nperson,
+                child: Icon(Icons.person, size: 40),
               )
             ],
           ),
@@ -139,6 +143,7 @@ class _EditRecipeState extends State<EditRecipe> {
                     return Recipeingredient(
                       ingredient: newRecipe.ingredients[index],
                       onChange: onChange,
+                      check: true,
                     );
                   })),
           //ADD NEW INGREDIENT BUTTON

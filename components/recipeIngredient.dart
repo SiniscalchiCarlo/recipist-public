@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:smart_shopping_list/models/Ingredient.dart';
+import 'package:smart_shopping_list/styling/my_check_bok.dart';
 import 'package:smart_shopping_list/styling/my_drop_down.dart';
 import 'package:smart_shopping_list/styling/my_number_input.dart';
 import 'package:smart_shopping_list/styling/my_text_field.dart';
 
-void printWarning(String text) {
-  print('\x1B[33m$text\x1B[0m');
-}
-
 class Recipeingredient extends StatefulWidget {
   final Function onChange;
   final Ingredient ingredient;
+  final bool check;
   const Recipeingredient(
-      {super.key, required this.onChange, required this.ingredient});
+      {super.key,
+      required this.onChange,
+      required this.ingredient,
+      required this.check});
 
   @override
   State<Recipeingredient> createState() => _RecipeingredientState();
@@ -41,10 +42,12 @@ class _RecipeingredientState extends State<Recipeingredient> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.circle,
-            size: 12,
-          ),
+          widget.check
+              ? MyCheckBok()
+              : Icon(
+                  Icons.circle,
+                  size: 12,
+                ),
           SizedBox(width: 5),
           //INGREDIENT NAM
           MyTextField(

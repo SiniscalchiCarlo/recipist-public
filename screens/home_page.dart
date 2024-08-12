@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smart_shopping_list/screens/ingredients_page.dart';
 import 'package:smart_shopping_list/screens/recipes_page.dart';
-import 'package:smart_shopping_list/screens/shopping_list.dart';
+import 'package:smart_shopping_list/screens/list_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,9 +13,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   static const List<Widget> _widgetOptions = <Widget>[
-    ShoppingList(),
+    ListPage(),
     RecipesPage(),
-    IngredientsPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -39,10 +38,6 @@ class _HomePageState extends State<HomePage> {
             BottomNavigationBarItem(
               icon: Icon(Icons.menu_book),
               label: 'Recipes',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.soup_kitchen),
-              label: 'Ingredients',
             ),
           ],
           currentIndex: _selectedIndex,

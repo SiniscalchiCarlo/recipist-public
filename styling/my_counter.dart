@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:smart_shopping_list/styling/my_text.dart';
 
-class Personscounter extends StatefulWidget {
+class MyCounter extends StatefulWidget {
   final Function onPressed;
+  final double? size;
   final int startValue;
-  const Personscounter(
-      {super.key, required this.onPressed, required this.startValue});
+  final Widget? child;
+  const MyCounter(
+      {super.key,
+      required this.onPressed,
+      required this.startValue,
+      this.child,
+      this.size});
 
   @override
-  State<Personscounter> createState() => _PersonscounterState();
+  State<MyCounter> createState() => _MyCounterState();
 }
 
-class _PersonscounterState extends State<Personscounter> {
+class _MyCounterState extends State<MyCounter> {
   late int numberPersons;
   @override
   void initState() {
@@ -25,9 +31,9 @@ class _PersonscounterState extends State<Personscounter> {
       children: [
         MyText(
           text: "$numberPersons",
-          size: 30,
+          size: (widget.size) ?? 18,
         ),
-        Icon(Icons.person, size: 40),
+        widget.child ?? SizedBox.shrink(),
         Column(
           children: [
             IconButton(
@@ -35,13 +41,15 @@ class _PersonscounterState extends State<Personscounter> {
                   numberPersons += 1;
                   widget.onPressed(numberPersons);
                 },
-                icon: Icon(Icons.keyboard_arrow_up, size: 40)),
+                icon: Icon(Icons.keyboard_arrow_up,
+                    size: widget.size != null ? (widget.size! + 10) : 30)),
             IconButton(
                 onPressed: () {
                   numberPersons -= 1;
                   widget.onPressed(numberPersons);
                 },
-                icon: Icon(Icons.keyboard_arrow_down, size: 40))
+                icon: Icon(Icons.keyboard_arrow_down,
+                    size: widget.size != null ? (widget.size! + 10) : 30))
           ],
         )
       ],
