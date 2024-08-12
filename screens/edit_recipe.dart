@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smart_shopping_list/components/personsCounter.dart';
 import 'package:smart_shopping_list/components/recipeIngredient.dart';
 import 'package:smart_shopping_list/models/Ingredient.dart';
 import 'package:smart_shopping_list/styling/my_action_button.dart';
@@ -39,6 +40,12 @@ class _EditRecipeState extends State<EditRecipe> {
     _notesController = TextEditingController(text: newRecipe.notes);
   }
 
+  void setPersons(value) {
+    setState(() {
+      newRecipe.nperson = value;
+    });
+  }
+
   void onChange(ingredient, name, quantity, unit) {
     ingredient.name = name;
     ingredient.quantity = quantity;
@@ -49,7 +56,7 @@ class _EditRecipeState extends State<EditRecipe> {
     final result = Recipe(
         name: _nameController.text,
         notes: _notesController.text,
-        nperson: 2,
+        nperson: newRecipe.nperson,
         ingredients: newRecipe.ingredients);
     Navigator.pop(context, result);
   }
@@ -73,37 +80,58 @@ class _EditRecipeState extends State<EditRecipe> {
         body: Column(children: [
           //RECIPE TITLE AND IMAGE
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Icon(Icons.image),
-              MyTextField(controller: _nameController, maxLength: 15, size: 30),
-              SizedBox(
-                width: 20,
-              ),
-              MyButton(
-                  child: Icon(
-                    Icons.check,
-                    color: Colors.green,
-                    size: 30,
+              Row(children: [
+                Icon(Icons.image),
+                MyTextField(
+                    controller: _nameController, maxLength: 15, size: 30)
+              ]),
+
+              //DELETE AND SAVE RECIPE
+              Row(
+                children: [
+                  MyButton(
+                      child: Icon(
+                        Icons.check,
+                        color: Colors.green,
+                        size: 30,
+                      ),
+                      onPressed: saveRecipe),
+                  SizedBox(
+                    width: 10,
                   ),
-                  onPressed: saveRecipe),
-              SizedBox(
-                width: 10,
-              ),
-              MyButton(
-                  child: Icon(
-                    Icons.delete_forever,
-                    color: Colors.red,
-                    size: 30,
-                  ),
-                  onPressed: deleteRecipe),
+                  MyButton(
+                      child: Icon(
+                        Icons.delete_forever,
+                        color: Colors.red,
+                        size: 30,
+                      ),
+                      onPressed: deleteRecipe),
+                ],
+              )
             ],
           ),
 
           SizedBox(
             height: 30,
           ),
-          MyText(text: "Ingredients", size: 25),
-          // RECIPE INGREDIENT NAMES
+
+          //NUMBER OF PERSONS
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              MyText(text: "Ingredients:", size: 25),
+              SizedBox(
+                width: 20,
+              ),
+              Personscounter(
+                onPressed: setPersons,
+                startValue: newRecipe.nperson,
+              )
+            ],
+          ),
+          // RECIPE INGREDIENTS
           Expanded(
               child: ListView.builder(
                   itemCount: newRecipe.ingredients.length,
@@ -113,7 +141,7 @@ class _EditRecipeState extends State<EditRecipe> {
                       onChange: onChange,
                     );
                   })),
-
+          //ADD NEW INGREDIENT BUTTON
           SizedBox(
             height: 30,
           ),

@@ -39,12 +39,14 @@ class _RecipeingredientState extends State<Recipeingredient> {
     return Container(
       margin: EdgeInsets.only(top: 5, left: 0, right: 0, bottom: 0),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
             Icons.circle,
             size: 12,
           ),
           SizedBox(width: 5),
+          //INGREDIENT NAM
           MyTextField(
               controller: nameController,
               maxLength: 20,
@@ -54,6 +56,7 @@ class _RecipeingredientState extends State<Recipeingredient> {
                   quantityController.text,
                   unitController.text)),
           SizedBox(width: 15),
+          //INGREDIENT QUANTIY
           MyNumberField(
             controller: quantityController,
             maxLength: 4,
@@ -64,6 +67,7 @@ class _RecipeingredientState extends State<Recipeingredient> {
                 unitController.text),
           ),
           SizedBox(width: 10),
+          //INGREDIENT UNIT
           MyDropDown(
             items: ['unit', 'g', 'kg', 'ml', 'l'],
             selectedValue: selectedUnit,
