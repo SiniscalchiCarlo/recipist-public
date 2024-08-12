@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 class MyActionButton extends StatelessWidget {
   final Function()? onPressed;
-  const MyActionButton({super.key, required this.onPressed});
+  final String text;
+  const MyActionButton(
+      {super.key, required this.onPressed, required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +14,7 @@ class MyActionButton extends StatelessWidget {
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(100))),
       child: Text(
-        '+',
+        text,
         style: TextStyle(
             color: Theme.of(context).colorScheme.inversePrimary, fontSize: 25),
       ),

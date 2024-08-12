@@ -1,34 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class MyNumberInput extends StatelessWidget {
+class MyNumberField extends StatelessWidget {
   final TextEditingController controller;
-
-  const MyNumberInput({
-    Key? key,
-    required this.controller,
-  }) : super(key: key);
+  final int maxLength;
+  final double? size;
+  final Function(String)? onChanged;
+  const MyNumberField(
+      {super.key,
+      required this.controller,
+      required this.maxLength,
+      this.size,
+      this.onChanged});
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 40,
-      height: 30,
+    return Container(
+      constraints: BoxConstraints(
+        maxWidth: maxLength * (size ?? 18) * 0.6, // Set the maximum width here
+      ),
       child: TextField(
-        controller: controller,
+        onChanged: onChanged,
+        maxLength: maxLength,
         keyboardType: TextInputType.numberWithOptions(decimal: true),
-        inputFormatters: <TextInputFormatter>[
-          FilteringTextInputFormatter.allow(RegExp(r'^[0-9]*[.,]?[0-9]*')),
-        ],
+        controller: controller,
         style: GoogleFonts.dmSerifText(
-          fontSize: 20,
+          fontSize: size ?? 18,
           color: Theme.of(context).colorScheme.inversePrimary,
         ),
-        decoration: InputDecoration(
-          contentPadding: EdgeInsets.all(5),
-          border: OutlineInputBorder(),
-        ),
+        decoration: InputDecoration(counterText: ""),
       ),
     );
   }
