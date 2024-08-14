@@ -19,15 +19,20 @@ List<Ingredient> ingredients3 = [
   Ingredient(name: "something very very very long", quantity: "0.5", unit: "g"),
   Ingredient(name: "milk", quantity: "0.5", unit: "unit"),
 ];
-
+//450
 Recipe r1 =
-    Recipe(name: "Recipe1", nperson: 3, ingredients: ingredients1, notes: "");
+    Recipe(name: "Recipe1", nperson: 4, ingredients: ingredients1, notes: "");
 Recipe r2 =
-    Recipe(name: "Recipe1", nperson: 2, ingredients: ingredients2, notes: "");
+    Recipe(name: "Recipe2", nperson: 2, ingredients: ingredients1, notes: "");
 Recipe r3 =
-    Recipe(name: "Recipe1", nperson: 5, ingredients: ingredients3, notes: "");
+    Recipe(name: "Recipe3", nperson: 5, ingredients: ingredients1, notes: "");
+Recipe r4 =
+    Recipe(name: "Recipe4", nperson: 5, ingredients: ingredients3, notes: "");
 
-List<Recipe> recipes = [r1, r2, r3];
+Recipe r7 =
+    Recipe(name: "Recipe7", nperson: 5, ingredients: ingredients3, notes: "");
+
+List<Recipe> recipes = [r1, r2, r3, r4, r7];
 
 List<ShopList> shopLists = [
   ShopList(

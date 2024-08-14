@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smart_shopping_list/models/Ingredient.dart';
+import 'package:smart_shopping_list/models/Recipe.dart';
 import 'package:smart_shopping_list/styling/my_check_bok.dart';
 import 'package:smart_shopping_list/styling/my_drop_down.dart';
 import 'package:smart_shopping_list/styling/my_number_input.dart';
@@ -27,7 +28,17 @@ class _RecipeingredientState extends State<Recipeingredient> {
   @override
   void initState() {
     super.initState();
+    nameController = TextEditingController(text: widget.ingredient.name);
+    unitController = TextEditingController(text: widget.ingredient.unit);
+    quantityController =
+        TextEditingController(text: widget.ingredient.quantity.toString());
+    selectedUnit = widget.ingredient.unit;
+  }
 
+  @override
+  void didUpdateWidget(covariant Recipeingredient oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Check if the new widget's data is different from the old one
     nameController = TextEditingController(text: widget.ingredient.name);
     unitController = TextEditingController(text: widget.ingredient.unit);
     quantityController =

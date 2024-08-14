@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:smart_shopping_list/components/recipeIngredient.dart';
+import 'package:smart_shopping_list/models/Ingredient.dart';
 import 'package:smart_shopping_list/models/ShopList.dart';
-import 'package:smart_shopping_list/styling/my_action_button.dart';
+import 'package:smart_shopping_list/screens/recipes_dialog.dart';
 import 'package:smart_shopping_list/styling/my_button.dart';
 import 'package:smart_shopping_list/styling/my_counter.dart';
 import 'package:smart_shopping_list/styling/my_text.dart';
@@ -32,8 +33,94 @@ class _EditShopListState extends State<EditShopList> {
     _nameController = TextEditingController(text: newList.name);
   }
 
+  void saveList() {
+    newList.name = _nameController.text;
+    final result = newList;
+    Navigator.pop(context, result);
+  }
+
+  void deleteList() {
+    final result = null;
+    Navigator.pop(context, result);
+  }
+
+  void deleteRecipe(int index) {
+    setState(() {
+      newList.recipes.removeAt(index);
+    });
+    getListIngredients();
+  }
+
+  int? findIngredient(ingredients, myIngredient) {
+    int index = -1;
+    for (var ingredient in ingredients) {
+      index += 1;
+      if (ingredient.name == myIngredient.name &&
+          ingredient.unit == myIngredient.unit) {
+        return index;
+      }
+    }
+    return null;
+  }
+
+  void getListIngredients() {
+    List<Ingredient> ingredients = [];
+    for (var lrecipe in newList.recipes) {
+      int nPersons =
+          lrecipe.nperson; //number of person the recipe will be cooked for
+      for (var ingredient in lrecipe.recipe.ingredients) {
+        //check if already exists the same ingredient with the same unit
+        int? index = findIngredient(ingredients,
+            ingredient); //null: no ingredient found, index: index of the ingredient
+
+        //calculate the proportion of the ingredients
+        double qt = double.parse(ingredient.quantity);
+        int nPersons_ = lrecipe.recipe
+            .nperson; //nPersons_ is the number of persons the recipe quantities are calculated for
+        qt = (qt / nPersons_) * nPersons;
+        if (index != null) {
+          //sum the quantities if the already existing ingredent
+          qt = double.parse(ingredients[index].quantity) + qt;
+          ingredients[index].quantity = qt.toString();
+        } else {
+          //add a new ingredient
+          ingredients.add(Ingredient(
+              name: ingredient.name,
+              quantity: qt.toString(),
+              unit: ingredient.unit));
+        }
+      }
+    }
+    setState(() {
+      newList.recipesIngredients = ingredients;
+    });
+  }
+
+  void addRecipe() async {
+    final result = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return RecipesDialog(
+          selectedRecipes: newList.recipes,
+        ); // Utilizza la nuova schermata del dialog
+      },
+    );
+    if (result != null) {
+      for (var lr in result) {
+        printWarning(lr.recipe.name);
+      }
+      if (result != null) {
+        setState(() {
+          newList.recipes = result;
+        });
+        getListIngredients();
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    getListIngredients();
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.surface,
         body: Column(
@@ -56,7 +143,7 @@ class _EditShopListState extends State<EditShopList> {
                           color: Colors.green,
                           size: 30,
                         ),
-                        onPressed: () {}),
+                        onPressed: saveList),
                     SizedBox(
                       width: 10,
                     ),
@@ -66,7 +153,7 @@ class _EditShopListState extends State<EditShopList> {
                           color: Colors.red,
                           size: 30,
                         ),
-                        onPressed: () {}),
+                        onPressed: deleteList),
                   ],
                 )
               ],
@@ -92,16 +179,23 @@ class _EditShopListState extends State<EditShopList> {
                             SizedBox(width: 20),
                             MyCounter(
                                 size: 20,
-                                onPressed: (value) => setState(() {
-                                      newList.recipes[index].nperson = value;
-                                    }),
-                                startValue: newList.recipes[index].nperson),
+                                onPressed: (value) {
+                                  setState(() {
+                                    newList.recipes[index].nperson = value;
+                                  });
+                                  getListIngredients();
+                                },
+                                startValue: newList.recipes[index].nperson,
+                                child: Icon(Icons.person, size: 30)),
                             SizedBox(width: 20),
-                            Icon(
-                              Icons.delete_forever_outlined,
-                              size: 30,
-                              color: Colors.red.shade700,
-                            ),
+                            IconButton(
+                              onPressed: () => deleteRecipe(index),
+                              icon: Icon(
+                                Icons.delete_forever_outlined,
+                                size: 30,
+                                color: Colors.red.shade700,
+                              ),
+                            )
                           ]);
                     } else {
                       return Center(
@@ -111,7 +205,7 @@ class _EditShopListState extends State<EditShopList> {
                               color:
                                   Theme.of(context).colorScheme.inversePrimary,
                             ),
-                            onPressed: () {}),
+                            onPressed: addRecipe),
                       );
                     }
                   }),

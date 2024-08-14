@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
 
 class MyCheckBok extends StatefulWidget {
-  const MyCheckBok({super.key});
+  final Function? onChanged;
+  final bool? initialValue;
+  const MyCheckBok({super.key, this.onChanged, this.initialValue});
 
   @override
   State<MyCheckBok> createState() => _MyCheckBokState();
 }
 
 class _MyCheckBokState extends State<MyCheckBok> {
-  bool? isChecked = false;
+  late bool? isChecked;
+
+  @override
+  void initState() {
+    super.initState();
+    isChecked = widget.initialValue ?? false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Checkbox(
@@ -19,6 +28,9 @@ class _MyCheckBokState extends State<MyCheckBok> {
         setState(() {
           isChecked = value;
         });
+        if (widget.onChanged != null) {
+          widget.onChanged!(); // Use ! to call the non-null function
+        }
       },
     );
   }
