@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_shopping_list/styling/my_counter.dart';
 import 'package:smart_shopping_list/components/recipeIngredient.dart';
@@ -25,6 +27,7 @@ class _EditRecipeState extends State<EditRecipe> {
   late TextEditingController _nameController;
   late TextEditingController _notesController;
   late Recipe newRecipe;
+  late File? selectedImage;
 
   @override
   void initState() {
@@ -35,9 +38,11 @@ class _EditRecipeState extends State<EditRecipe> {
             name: "",
             notes: "",
             ingredients: [Ingredient(name: "", quantity: "0", unit: "unit")],
-            nperson: 1);
+            nperson: 1,
+            id: -1); //temporary id will be changed when the recipe is saved
     _nameController = TextEditingController(text: newRecipe.name);
     _notesController = TextEditingController(text: newRecipe.notes);
+    selectedImage = newRecipe.photo ?? null;
   }
 
   void setPersons(value) {
@@ -57,7 +62,9 @@ class _EditRecipeState extends State<EditRecipe> {
         name: _nameController.text,
         notes: _notesController.text,
         nperson: newRecipe.nperson,
-        ingredients: newRecipe.ingredients);
+        ingredients: newRecipe.ingredients,
+        photo: selectedImage ?? null,
+        id: -1); //temporary id will be changed after navigator pop.
     Navigator.pop(context, result);
   }
 
@@ -75,97 +82,144 @@ class _EditRecipeState extends State<EditRecipe> {
 
   @override
   Widget build(BuildContext context) {
+    Future PickImageFromCamera() async {
+      final returnedImage =
+          await ImagePicker().pickImage(source: ImageSource.camera);
+      if (returnedImage == null) return;
+      setState(() {
+        selectedImage = File(returnedImage.path);
+      });
+    }
+
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.surface,
         body: Column(children: [
           //RECIPE TITLE AND IMAGE
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(children: [
-                Icon(Icons.image),
-                MyTextField(
-                    controller: _nameController, maxLength: 15, size: 30)
-              ]),
-
-              //DELETE AND SAVE RECIPE
-              Row(
-                children: [
-                  MyButton(
-                      child: Icon(
-                        Icons.check,
-                        color: Colors.green,
-                        size: 30,
+          Container(
+            margin: EdgeInsets.only(top: 40, left: 5, right: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(children: [
+                  //PLANT PHOTO
+                  OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        shape: CircleBorder(),
+                        padding: selectedImage != null
+                            ? EdgeInsets.all(0)
+                            : EdgeInsets.all(15),
+                        backgroundColor: Colors
+                            .white, // <-- Button color // <-- Splash color
                       ),
-                      onPressed: saveRecipe),
+                      onPressed: () {
+                        PickImageFromCamera();
+                      },
+                      child: selectedImage != null
+                          ? ClipOval(
+                              child: SizedBox.fromSize(
+                                size: Size.fromRadius(30), // Image radius
+                                child: Image.file(
+                                  selectedImage!,
+                                  fit: BoxFit
+                                      .cover, // Ensures the image fills the circle
+                                ),
+                              ),
+                            )
+                          : Icon(
+                              Icons.add_a_photo_rounded,
+                              color: Colors.grey,
+                              size: 30.0,
+                            )),
                   SizedBox(
-                    width: 10,
+                    width: 5,
                   ),
-                  MyButton(
-                      child: Icon(
-                        Icons.delete_forever,
-                        color: Colors.red,
-                        size: 30,
-                      ),
-                      onPressed: deleteRecipe),
-                ],
-              )
-            ],
-          ),
+                  MyTextField(
+                    controller: _nameController,
+                    maxLength: 15,
+                    size: 20,
+                    maxWidth: 150,
+                  )
+                ]),
 
-          SizedBox(
-            height: 30,
+                //DELETE AND SAVE RECIPE
+                Column(
+                  children: [
+                    MyButton(
+                        child: Icon(
+                          Icons.check,
+                          color: Colors.green,
+                          size: 20,
+                        ),
+                        onPressed: saveRecipe),
+                    MyButton(
+                        child: Icon(
+                          Icons.delete_forever,
+                          color: Colors.red,
+                          size: 20,
+                        ),
+                        onPressed: deleteRecipe),
+                  ],
+                )
+              ],
+            ),
           ),
 
           //NUMBER OF PERSONS
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              MyText(text: "Ingredients:", size: 25),
+              MyText(text: "Ingredients:", size: 20),
               SizedBox(
                 width: 20,
               ),
               MyCounter(
-                size: 30,
+                size: 20,
                 onPressed: (value) => setState(() {
                   newRecipe.nperson = value;
                 }),
                 startValue: newRecipe.nperson,
-                child: Icon(Icons.person, size: 40),
+                child: Icon(Icons.person, size: 30),
               )
             ],
           ),
           // RECIPE INGREDIENTS
           Expanded(
               child: ListView.builder(
-                  itemCount: newRecipe.ingredients.length,
+                  itemCount: newRecipe.ingredients.length + 1,
                   itemBuilder: (context, index) {
-                    return Recipeingredient(
-                      ingredient: newRecipe.ingredients[index],
-                      onChange: onChange,
-                      check: true,
-                    );
+                    if (index < newRecipe.ingredients.length) {
+                      return Recipeingredient(
+                        ingredient: newRecipe.ingredients[index],
+                        onChange: onChange,
+                        check: true,
+                      );
+                    } else {
+                      return Column(
+                        children: [
+                          //ADD NEW INGREDIENT BUTTON
+                          SizedBox(
+                            height: 10,
+                          ),
+                          MyActionButton(onPressed: addIngredient, text: "+"),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          MyText(text: "Notes", size: 25),
+                          Container(
+                            margin: EdgeInsets.all(10),
+                            child: TextField(
+                                controller: _notesController,
+                                maxLines: 15, //or null
+                                keyboardType: TextInputType.multiline,
+                                decoration: const InputDecoration(
+                                    contentPadding: EdgeInsets.all(10.0),
+                                    hintText: "Enter your notes here",
+                                    border: OutlineInputBorder())),
+                          )
+                        ],
+                      );
+                    }
                   })),
-          //ADD NEW INGREDIENT BUTTON
-          SizedBox(
-            height: 30,
-          ),
-          MyActionButton(onPressed: addIngredient, text: "+"),
-          SizedBox(
-            height: 40,
-          ),
-          MyText(text: "Notes", size: 25),
-          Container(
-            margin: EdgeInsets.all(10),
-            child: TextField(
-                controller: _notesController,
-                maxLines: 15, //or null
-                keyboardType: TextInputType.multiline,
-                decoration: const InputDecoration(
-                    contentPadding: EdgeInsets.all(10.0),
-                    hintText: "Enter your notes here",
-                    border: OutlineInputBorder())),
-          )
         ]));
   }
 }

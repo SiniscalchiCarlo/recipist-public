@@ -1,4 +1,5 @@
 import 'package:smart_shopping_list/models/Ingredient.dart';
+import 'package:smart_shopping_list/models/ListRecipe.dart';
 import 'package:smart_shopping_list/models/Recipe.dart';
 import 'package:smart_shopping_list/models/ShopList.dart';
 

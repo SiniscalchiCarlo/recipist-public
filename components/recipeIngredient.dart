@@ -49,9 +49,9 @@ class _RecipeingredientState extends State<Recipeingredient> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 5, left: 0, right: 0, bottom: 0),
+      margin: EdgeInsets.only(top: 0, left: 0, right: 0, bottom: 0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           widget.check
               ? MyCheckBok()
@@ -64,6 +64,7 @@ class _RecipeingredientState extends State<Recipeingredient> {
           MyTextField(
               controller: nameController,
               maxLength: 20,
+              maxWidth: 130,
               onChanged: (value) => widget.onChange(
                   widget.ingredient,
                   nameController.text,

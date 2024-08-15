@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smart_shopping_list/data.dart';
-import 'package:smart_shopping_list/models/ShopList.dart';
+import 'package:smart_shopping_list/models/ListRecipe.dart';
 import 'package:smart_shopping_list/screens/edit_recipe.dart';
 import 'package:smart_shopping_list/styling/my_check_bok.dart';
 import 'package:smart_shopping_list/styling/my_text.dart';

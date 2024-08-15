@@ -67,7 +67,18 @@ class _RecipesPageState extends State<RecipesPage> {
               onTap: () => modifyRecipe(index),
               child: Row(
                 children: [
-                  Icon(Icons.image),
+                  recipes[index].photo != null
+                      ? ClipOval(
+                          child: SizedBox.fromSize(
+                            size: Size.fromRadius(15), // Image radius
+                            child: Image.file(
+                              recipes[index].photo!,
+                              fit: BoxFit
+                                  .cover, // Ensures the image fills the circle
+                            ),
+                          ),
+                        )
+                      : Icon(Icons.menu_book),
                   SizedBox(width: 10),
                   MyText(text: recipes[index].name, size: 20)
                 ],

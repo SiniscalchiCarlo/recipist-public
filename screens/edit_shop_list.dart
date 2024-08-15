@@ -29,6 +29,7 @@ class _EditShopListState extends State<EditShopList> {
           recipes: [],
           recipesIngredients: [],
           otherIngredients: [],
+          id: -1, //temporary id will be changed when the lis tis saved
         );
     _nameController = TextEditingController(text: newList.name);
   }
