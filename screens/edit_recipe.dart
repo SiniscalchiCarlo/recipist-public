@@ -16,7 +16,7 @@ void printWarning(String text) {
 }
 
 class EditRecipe extends StatefulWidget {
-  final Recipe? recipe;
+  final Recipe recipe;
   const EditRecipe({super.key, required this.recipe});
 
   @override
@@ -33,16 +33,11 @@ class _EditRecipeState extends State<EditRecipe> {
   void initState() {
     super.initState();
 
-    newRecipe = widget.recipe ??
-        Recipe(
-            name: "",
-            notes: "",
-            ingredients: [Ingredient(name: "", quantity: "0", unit: "unit")],
-            nperson: 1,
-            id: -1); //temporary id will be changed when the recipe is saved
+    newRecipe = widget.recipe;
     _nameController = TextEditingController(text: newRecipe.name);
     _notesController = TextEditingController(text: newRecipe.notes);
-    selectedImage = newRecipe.photo ?? null;
+
+    selectedImage = newRecipe.photo;
   }
 
   void setPersons(value) {
@@ -63,13 +58,13 @@ class _EditRecipeState extends State<EditRecipe> {
         notes: _notesController.text,
         nperson: newRecipe.nperson,
         ingredients: newRecipe.ingredients,
-        photo: selectedImage ?? null,
-        id: -1); //temporary id will be changed after navigator pop.
+        imagePath: selectedImage?.path,
+        id: newRecipe.id); //temporary id will be changed after navigator pop.
     Navigator.pop(context, result);
   }
 
   void deleteRecipe() {
-    final result = null;
+    final result = "delete";
     Navigator.pop(context, result);
   }
 
@@ -168,7 +163,7 @@ class _EditRecipeState extends State<EditRecipe> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              MyText(text: "Ingredients:", size: 20),
+              MyText(text: "Ingredients for:", size: 20),
               SizedBox(
                 width: 20,
               ),
@@ -191,7 +186,7 @@ class _EditRecipeState extends State<EditRecipe> {
                       return Recipeingredient(
                         ingredient: newRecipe.ingredients[index],
                         onChange: onChange,
-                        check: true,
+                        check: false,
                       );
                     } else {
                       return Column(

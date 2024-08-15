@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:smart_shopping_list/data.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:smart_shopping_list/models/ListRecipe.dart';
+import 'package:smart_shopping_list/models/Recipe.dart';
 import 'package:smart_shopping_list/screens/edit_recipe.dart';
 import 'package:smart_shopping_list/styling/my_check_bok.dart';
 import 'package:smart_shopping_list/styling/my_text.dart';
@@ -15,6 +16,8 @@ class RecipesDialog extends StatefulWidget {
 
 class _RecipesDialogState extends State<RecipesDialog> {
   late List<ListRecipe> selectedRecipes;
+  List<Recipe> recipes =
+      Hive.box<Recipe>("recipes").values.cast<Recipe>().toList();
 
   @override
   void initState() {

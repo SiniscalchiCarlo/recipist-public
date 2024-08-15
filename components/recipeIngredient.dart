@@ -49,7 +49,7 @@ class _RecipeingredientState extends State<Recipeingredient> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 0, left: 0, right: 0, bottom: 0),
+      margin: EdgeInsets.only(top: 0, left: 5, right: 0, bottom: 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -60,7 +60,7 @@ class _RecipeingredientState extends State<Recipeingredient> {
                   size: 12,
                 ),
           SizedBox(width: 5),
-          //INGREDIENT NAM
+          //INGREDIENT NAME
           MyTextField(
               controller: nameController,
               maxLength: 20,

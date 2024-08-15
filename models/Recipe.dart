@@ -12,7 +12,7 @@ class Recipe {
   @HiveField(2)
   int nperson;
   @HiveField(3)
-  File? photo;
+  String? imagePath;
   @HiveField(4)
   List<Ingredient> ingredients;
   @HiveField(5)
@@ -24,5 +24,7 @@ class Recipe {
       required this.nperson,
       required this.ingredients,
       required this.id,
-      this.photo});
+      this.imagePath});
+
+  File? get photo => imagePath != null ? File(imagePath!) : null;
 }

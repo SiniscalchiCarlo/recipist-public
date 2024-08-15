@@ -22,7 +22,7 @@ class RecipeAdapter extends TypeAdapter<Recipe> {
       nperson: fields[2] as int,
       ingredients: (fields[4] as List).cast<Ingredient>(),
       id: fields[5] as int,
-      photo: fields[3] as File?,
+      imagePath: fields[3] as String?,
     );
   }
 
@@ -37,7 +37,7 @@ class RecipeAdapter extends TypeAdapter<Recipe> {
       ..writeByte(2)
       ..write(obj.nperson)
       ..writeByte(3)
-      ..write(obj.photo)
+      ..write(obj.imagePath)
       ..writeByte(4)
       ..write(obj.ingredients)
       ..writeByte(5)

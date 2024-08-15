@@ -1,10 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:smart_shopping_list/models/ShopList.dart';
 import 'package:smart_shopping_list/screens/edit_shop_list.dart';
 import 'package:smart_shopping_list/styling/my_action_button.dart';
 import 'package:smart_shopping_list/styling/my_card.dart';
 import 'package:smart_shopping_list/styling/my_text.dart';
-import 'package:smart_shopping_list/data.dart';
-import 'package:smart_shopping_list/screens/edit_recipe.dart';
 
 class ListPage extends StatefulWidget {
   const ListPage({super.key});
@@ -14,14 +16,40 @@ class ListPage extends StatefulWidget {
 }
 
 class _ListPageState extends State<ListPage> {
+  late Box<ShopList> shopListBox;
+  late List<ShopList> shopLists;
+
+  @override
+  void initState() {
+    super.initState();
+    shopListBox = Hive.box<ShopList>('shopLists');
+    shopLists = shopListBox.values.cast<ShopList>().toList();
+  }
+
+  int getHighestId() {
+    var keys = shopListBox.keys.cast<int>();
+    var highestId = keys.isNotEmpty ? keys.reduce(max) : 0;
+    return highestId;
+  }
+
   void addShopList() async {
+    int newId = getHighestId() + 1;
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => EditShopList(shopList: null),
+        builder: (context) => EditShopList(
+            shopList: ShopList(
+          name: "",
+          recipes: [],
+          recipesIngredients: [],
+          otherIngredients: [],
+          id: newId, //temporary id will be changed when the lis tis saved
+        )),
       ),
     );
     if (result != null) {
+      result.id = newId;
+      shopListBox.put(newId, result);
       setState(() {
         shopLists.add(result);
       });
@@ -36,6 +64,7 @@ class _ListPageState extends State<ListPage> {
       ),
     );
     if (result != null) {
+      shopListBox.put(shopLists[index].id, result);
       setState(() {
         shopLists[index] = result;
       });

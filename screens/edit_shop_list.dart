@@ -9,7 +9,7 @@ import 'package:smart_shopping_list/styling/my_text.dart';
 import 'package:smart_shopping_list/styling/my_text_field.dart';
 
 class EditShopList extends StatefulWidget {
-  final ShopList? shopList;
+  final ShopList shopList;
   const EditShopList({super.key, required this.shopList});
 
   @override
@@ -23,14 +23,8 @@ class _EditShopListState extends State<EditShopList> {
   @override
   void initState() {
     super.initState();
-    newList = widget.shopList ??
-        ShopList(
-          name: "",
-          recipes: [],
-          recipesIngredients: [],
-          otherIngredients: [],
-          id: -1, //temporary id will be changed when the lis tis saved
-        );
+    newList = widget.shopList;
+
     _nameController = TextEditingController(text: newList.name);
   }
 
@@ -126,38 +120,45 @@ class _EditShopListState extends State<EditShopList> {
         backgroundColor: Theme.of(context).colorScheme.surface,
         body: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(children: [
-                  Icon(Icons.image),
-                  MyTextField(
-                      controller: _nameController, maxLength: 15, size: 30)
-                ]),
+            Container(
+              margin: EdgeInsets.only(top: 40, left: 5, right: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(children: [
+                    Icon(Icons.image),
+                    MyTextField(
+                      controller: _nameController,
+                      maxLength: 15,
+                      size: 20,
+                      maxWidth: 150,
+                    )
+                  ]),
 
-                //DELETE AND SAVE LIST
-                Row(
-                  children: [
-                    MyButton(
-                        child: Icon(
-                          Icons.check,
-                          color: Colors.green,
-                          size: 30,
-                        ),
-                        onPressed: saveList),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    MyButton(
-                        child: Icon(
-                          Icons.delete_forever,
-                          color: Colors.red,
-                          size: 30,
-                        ),
-                        onPressed: deleteList),
-                  ],
-                )
-              ],
+                  //DELETE AND SAVE LIST
+                  Column(
+                    children: [
+                      MyButton(
+                          child: Icon(
+                            Icons.check,
+                            color: Colors.green,
+                            size: 20,
+                          ),
+                          onPressed: saveList),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      MyButton(
+                          child: Icon(
+                            Icons.delete_forever,
+                            color: Colors.red,
+                            size: 20,
+                          ),
+                          onPressed: deleteList),
+                    ],
+                  )
+                ],
+              ),
             ),
             SizedBox(height: 30),
             MyText(text: "What do you want to cook?", size: 30),

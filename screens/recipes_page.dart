@@ -1,8 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:smart_shopping_list/models/Ingredient.dart';
+import 'package:smart_shopping_list/models/Recipe.dart';
 import 'package:smart_shopping_list/styling/my_action_button.dart';
 import 'package:smart_shopping_list/styling/my_card.dart';
 import 'package:smart_shopping_list/styling/my_text.dart';
-import 'package:smart_shopping_list/data.dart';
 import 'package:smart_shopping_list/screens/edit_recipe.dart';
 
 class RecipesPage extends StatefulWidget {
@@ -13,14 +17,41 @@ class RecipesPage extends StatefulWidget {
 }
 
 class _RecipesPageState extends State<RecipesPage> {
+  late Box<Recipe> recipesBox;
+  late List<Recipe> recipes;
+
+  @override
+  void initState() {
+    super.initState();
+    recipesBox = Hive.box<Recipe>('recipes');
+    recipes = recipesBox.values.cast<Recipe>().toList();
+  }
+
+  int getHighestId() {
+    var keys = recipesBox.keys.cast<int>();
+    var highestId = keys.isNotEmpty ? keys.reduce(max) : 0;
+    return highestId;
+  }
+
   void addRecipe() async {
+    int newId = getHighestId() + 1;
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => EditRecipe(recipe: null),
+        builder: (context) => EditRecipe(
+            recipe: Recipe(
+                name: "",
+                notes: "",
+                ingredients: [
+                  Ingredient(name: "", quantity: "0", unit: "unit")
+                ],
+                nperson: 1,
+                id: newId)),
       ),
     );
     if (result != null) {
+      result.id = newId;
+      recipesBox.put(newId, result);
       setState(() {
         recipes.add(result);
       });
@@ -28,21 +59,26 @@ class _RecipesPageState extends State<RecipesPage> {
   }
 
   void modifyRecipe(index) async {
+    printWarning("${recipes[index].name}");
+    printWarning("${recipes[index].id}");
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => EditRecipe(recipe: recipes[index]),
       ),
     );
-    if (result != null) {
+    if (result != null && result != "delete") {
+      printWarning("${recipes[index].id}");
+      recipesBox.put(recipes[index].id, result);
       setState(() {
         recipes[index] = result;
       });
-    } else {
+    }
+
+    if (result == "delete") {
+      recipesBox.delete(recipes[index].id);
       setState(() {
-        print(recipes);
         recipes.removeAt(index);
-        print(recipes);
       });
     }
   }

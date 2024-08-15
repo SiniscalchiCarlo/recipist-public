@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_shopping_list/models/Ingredient.dart';
+import 'package:smart_shopping_list/models/ListRecipe.dart';
 import 'package:smart_shopping_list/models/Recipe.dart';
 import 'package:smart_shopping_list/models/ShopList.dart';
 import 'package:smart_shopping_list/screens/home_page.dart';
@@ -16,6 +17,7 @@ void main() async {
   Hive.registerAdapter(RecipeAdapter());
   Hive.registerAdapter(ListRecipeAdapter());
   Hive.registerAdapter(ShopListAdapter());
+
   await Hive.openBox<Recipe>('recipes');
   await Hive.openBox<ShopList>('shopLists');
 
