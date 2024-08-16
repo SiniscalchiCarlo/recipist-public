@@ -11,13 +11,15 @@ class MyTextField extends StatelessWidget {
   final double? size;
   final Function(String)? onChanged;
   final double? maxWidth;
+  final String? hintText;
   const MyTextField(
       {super.key,
       required this.controller,
       required this.maxLength,
       this.size,
       this.onChanged,
-      this.maxWidth});
+      this.maxWidth,
+      this.hintText});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +36,7 @@ class MyTextField extends StatelessWidget {
           fontSize: size ?? 18,
           color: Theme.of(context).colorScheme.inversePrimary,
         ),
-        decoration: InputDecoration(counterText: ""),
+        decoration: InputDecoration(counterText: "", hintText: hintText),
       ),
     );
   }

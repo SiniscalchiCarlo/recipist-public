@@ -8,6 +8,7 @@ import 'package:smart_shopping_list/models/ListRecipe.dart';
 import 'package:smart_shopping_list/models/Recipe.dart';
 import 'package:smart_shopping_list/models/ShopList.dart';
 import 'package:smart_shopping_list/screens/home_page.dart';
+import 'package:smart_shopping_list/screens/login_page.dart';
 import 'package:smart_shopping_list/theme/theme_provider.dart';
 
 void main() async {
@@ -37,7 +38,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: HomePage(),
+      home: LoginPage(),
       theme: Provider.of<ThemeProvider>(context).themeData,
     );
   }
