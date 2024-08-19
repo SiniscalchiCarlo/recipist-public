@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:smart_shopping_list/components/user_app_bar.dart';
 import 'package:smart_shopping_list/models/ShopList.dart';
 import 'package:smart_shopping_list/screens/edit_shop_list.dart';
 import 'package:smart_shopping_list/styling/my_action_button.dart';
@@ -47,7 +48,7 @@ class _ListPageState extends State<ListPage> {
         )),
       ),
     );
-    if (result != null) {
+    if (result != null && result != "delete") {
       result.id = newId;
       shopListBox.put(newId, result);
       setState(() {
@@ -63,12 +64,15 @@ class _ListPageState extends State<ListPage> {
         builder: (context) => EditShopList(shopList: shopLists[index]),
       ),
     );
-    if (result != null) {
+    if (result != null && result != "delete") {
       shopListBox.put(shopLists[index].id, result);
       setState(() {
         shopLists[index] = result;
       });
-    } else {
+    }
+
+    if (result == "delete") {
+      shopListBox.delete(shopLists[index].id);
       setState(() {
         print(shopLists);
         shopLists.removeAt(index);
@@ -80,11 +84,7 @@ class _ListPageState extends State<ListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          title: MyText(
-        text: "Shop lists",
-        size: 48,
-      )),
+      appBar: AppBar(title: UserAppBar()),
       backgroundColor: Theme.of(context).colorScheme.surface,
       floatingActionButton: MyActionButton(
         onPressed: addShopList,

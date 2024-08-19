@@ -49,7 +49,7 @@ class _RecipesPageState extends State<RecipesPage> {
                 id: newId)),
       ),
     );
-    if (result != null) {
+    if (result != null && result != "delete") {
       result.id = newId;
       recipesBox.put(newId, result);
       setState(() {

@@ -41,7 +41,7 @@ class _EditShopListState extends State<EditShopList> {
   }
 
   void deleteList() {
-    final result = null;
+    final result = "delete";
     Navigator.pop(context, result);
   }
 
