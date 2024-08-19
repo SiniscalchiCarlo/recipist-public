@@ -9,7 +9,10 @@ import 'package:smart_shopping_list/models/Recipe.dart';
 import 'package:smart_shopping_list/models/ShopList.dart';
 import 'package:smart_shopping_list/screens/home_page.dart';
 import 'package:smart_shopping_list/screens/login_page.dart';
+import 'package:smart_shopping_list/screens/recipes_page.dart';
 import 'package:smart_shopping_list/theme/theme_provider.dart';
+import 'package:uni_links/uni_links.dart';
+import 'dart:async';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,15 +34,68 @@ void main() async {
   ));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late StreamSubscription _sub;
+  String? _currentPath;
+
+  @override
+  void initState() {
+    super.initState();
+    _handleIncomingLinks();
+  }
+
+  void _handleIncomingLinks() {
+    // This will handle the deep link when the app is already running
+    _sub = uriLinkStream.listen((Uri? uri) {
+      if (uri != null) {
+        setState(() {
+          _currentPath = uri.path;
+        });
+      }
+    }, onError: (Object err) {
+      print('Failed to handle link: $err');
+    });
+
+    // This will handle the deep link when the app is opened via a link
+    getInitialUri().then((Uri? uri) {
+      if (uri != null) {
+        setState(() {
+          _currentPath = uri.path;
+        });
+      }
+    }).catchError((err) {
+      print('Failed to get initial link: $err');
+    });
+  }
+
+  @override
+  void dispose() {
+    _sub.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    Widget page;
+    switch (_currentPath) {
+      case '/recipes':
+        page = RecipesPage();
+        break;
+      case '/':
+      default:
+        page = HomePage();
+        break;
+    }
+
     return MaterialApp(
-      home: LoginPage(),
-      theme: Provider.of<ThemeProvider>(context).themeData,
+      home: page,
     );
   }
 }
