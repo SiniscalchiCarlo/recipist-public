@@ -103,7 +103,7 @@ class _EditRecipeState extends State<EditRecipe> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(children: [
-                  //PLANT PHOTO
+                  //RECIPE PHOTO
                   OutlinedButton(
                       style: OutlinedButton.styleFrom(
                         shape: CircleBorder(),

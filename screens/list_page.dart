@@ -90,20 +90,30 @@ class _ListPageState extends State<ListPage> {
         onPressed: addShopList,
         text: "+",
       ),
-      body: ListView.builder(
-          itemCount: shopLists.length,
-          itemBuilder: (BuildContext context, int index) {
-            return MyCard(
-              onTap: () => modifyShopList(index),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(width: 10),
-                  MyText(text: shopLists[index].name, size: 20)
-                ],
-              ),
-            );
-          }),
+      body: Column(
+        children: [
+          MyText(
+            text: "My shopping lists:",
+            size: 22,
+          ),
+          Expanded(
+            child: ListView.builder(
+                itemCount: shopLists.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return MyCard(
+                    onTap: () => modifyShopList(index),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(width: 10),
+                        MyText(text: shopLists[index].name, size: 20)
+                      ],
+                    ),
+                  );
+                }),
+          ),
+        ],
+      ),
     );
   }
 }
