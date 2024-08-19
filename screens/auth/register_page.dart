@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_shopping_list/screens/auth/auth_page.dart';
 import 'package:smart_shopping_list/screens/edit_recipe.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -39,7 +40,10 @@ class _RegisterPageState extends State<RegisterPage> {
                   'A verification code has been sent to ${_emailController.text.trim()}. Please check your email to verify your account.'),
               actions: [
                 TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
+                  onPressed: () => Navigator.push(context,
+                      MaterialPageRoute(builder: (context) {
+                    return AuthPage();
+                  })),
                   child: Text('OK'),
                 ),
               ],

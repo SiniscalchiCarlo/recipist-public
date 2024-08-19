@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_shopping_list/screens/auth/forgot_pw_page.dart';
+import 'package:smart_shopping_list/screens/home_page.dart';
 
 class LoginPage extends StatefulWidget {
   final VoidCallback showRegisterPage;
@@ -20,6 +21,8 @@ class _LoginPageState extends State<LoginPage> {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: _emailController.text.trim(),
           password: _pwController.text.trim());
+
+      Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
       setState(() {
         error = e.message.toString();

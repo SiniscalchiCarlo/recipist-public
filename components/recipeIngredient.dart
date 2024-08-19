@@ -73,7 +73,6 @@ class _RecipeingredientState extends State<Recipeingredient> {
               controller: _nameController,
               maxLength: 20,
               maxWidth: 130,
-              hintText: "Ingredient",
               onChanged: (value) => widget.onChange(
                   widget.ingredient,
                   _nameController.text,

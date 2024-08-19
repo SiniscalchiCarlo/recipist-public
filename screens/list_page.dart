@@ -74,9 +74,7 @@ class _ListPageState extends State<ListPage> {
     if (result == "delete") {
       shopListBox.delete(shopLists[index].id);
       setState(() {
-        print(shopLists);
         shopLists.removeAt(index);
-        print(shopLists);
       });
     }
   }
@@ -94,7 +92,7 @@ class _ListPageState extends State<ListPage> {
         children: [
           MyText(
             text: "My shopping lists:",
-            size: 22,
+            size: 25,
           ),
           Expanded(
             child: ListView.builder(

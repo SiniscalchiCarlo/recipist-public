@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:smart_shopping_list/components/user_app_bar.dart';
 import 'package:smart_shopping_list/models/Ingredient.dart';
 import 'package:smart_shopping_list/models/Recipe.dart';
 import 'package:smart_shopping_list/styling/my_action_button.dart';
@@ -86,41 +87,47 @@ class _RecipesPageState extends State<RecipesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          title: MyText(
-        text: "Recipes",
-        size: 48,
-      )),
+      appBar: AppBar(title: UserAppBar()),
       backgroundColor: Theme.of(context).colorScheme.surface,
       floatingActionButton: MyActionButton(
         onPressed: addRecipe,
         text: "+",
       ),
-      body: ListView.builder(
-          itemCount: recipes.length,
-          itemBuilder: (BuildContext context, int index) {
-            return MyCard(
-              onTap: () => modifyRecipe(index),
-              child: Row(
-                children: [
-                  recipes[index].photo != null
-                      ? ClipOval(
-                          child: SizedBox.fromSize(
-                            size: Size.fromRadius(15), // Image radius
-                            child: Image.file(
-                              recipes[index].photo!,
-                              fit: BoxFit
-                                  .cover, // Ensures the image fills the circle
-                            ),
-                          ),
-                        )
-                      : Icon(Icons.menu_book),
-                  SizedBox(width: 10),
-                  MyText(text: recipes[index].name, size: 20)
-                ],
-              ),
-            );
-          }),
+      body: Column(
+        children: [
+          MyText(
+            text: "My recipes:",
+            size: 25,
+          ),
+          Expanded(
+            child: ListView.builder(
+                itemCount: recipes.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return MyCard(
+                    onTap: () => modifyRecipe(index),
+                    child: Row(
+                      children: [
+                        recipes[index].photo != null
+                            ? ClipOval(
+                                child: SizedBox.fromSize(
+                                  size: Size.fromRadius(15), // Image radius
+                                  child: Image.file(
+                                    recipes[index].photo!,
+                                    fit: BoxFit
+                                        .cover, // Ensures the image fills the circle
+                                  ),
+                                ),
+                              )
+                            : Icon(Icons.menu_book),
+                        SizedBox(width: 10),
+                        MyText(text: recipes[index].name, size: 20)
+                      ],
+                    ),
+                  );
+                }),
+          ),
+        ],
+      ),
     );
   }
 }

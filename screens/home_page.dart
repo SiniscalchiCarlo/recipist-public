@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:smart_shopping_list/screens/ingredients_page.dart';
 import 'package:smart_shopping_list/screens/recipes_page.dart';
 import 'package:smart_shopping_list/screens/list_page.dart';
 

@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_shopping_list/screens/auth/auth_page.dart';
+import 'package:smart_shopping_list/screens/edit_recipe.dart';
 
 class ForgotPwPage extends StatefulWidget {
   const ForgotPwPage({super.key});
@@ -19,7 +21,19 @@ class _ForgotPwPageState extends State<ForgotPwPage> {
           context: context,
           builder: (context) {
             return AlertDialog(
-                content: Text('Password reset link sent! Check your email'));
+              content: Text('Password reset link sent! Check your email'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return AuthPage();
+                    }));
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
           });
     } on FirebaseAuthException catch (e) {
       setState(() {
@@ -84,7 +98,7 @@ class _ForgotPwPageState extends State<ForgotPwPage> {
           ),
           //SEND BUTTON
           MaterialButton(
-            onPressed: () {},
+            onPressed: pwReset,
             color: Colors.amber,
             child: Text(
               "Reset Password",
