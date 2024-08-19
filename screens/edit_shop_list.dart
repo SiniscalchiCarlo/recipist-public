@@ -28,6 +28,12 @@ class _EditShopListState extends State<EditShopList> {
     _nameController = TextEditingController(text: newList.name);
   }
 
+  @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
+  }
+
   void saveList() {
     newList.name = _nameController.text;
     final result = newList;

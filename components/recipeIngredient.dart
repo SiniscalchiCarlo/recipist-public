@@ -21,16 +21,16 @@ class Recipeingredient extends StatefulWidget {
 }
 
 class _RecipeingredientState extends State<Recipeingredient> {
-  late TextEditingController nameController;
-  late TextEditingController unitController;
-  late TextEditingController quantityController;
+  late TextEditingController _nameController;
+  late TextEditingController _unitController;
+  late TextEditingController _quantityController;
   late String selectedUnit;
   @override
   void initState() {
     super.initState();
-    nameController = TextEditingController(text: widget.ingredient.name);
-    unitController = TextEditingController(text: widget.ingredient.unit);
-    quantityController =
+    _nameController = TextEditingController(text: widget.ingredient.name);
+    _unitController = TextEditingController(text: widget.ingredient.unit);
+    _quantityController =
         TextEditingController(text: widget.ingredient.quantity.toString());
     selectedUnit = widget.ingredient.unit;
   }
@@ -39,11 +39,19 @@ class _RecipeingredientState extends State<Recipeingredient> {
   void didUpdateWidget(covariant Recipeingredient oldWidget) {
     super.didUpdateWidget(oldWidget);
     // Check if the new widget's data is different from the old one
-    nameController = TextEditingController(text: widget.ingredient.name);
-    unitController = TextEditingController(text: widget.ingredient.unit);
-    quantityController =
+    _nameController = TextEditingController(text: widget.ingredient.name);
+    _unitController = TextEditingController(text: widget.ingredient.unit);
+    _quantityController =
         TextEditingController(text: widget.ingredient.quantity.toString());
     selectedUnit = widget.ingredient.unit;
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _quantityController.dispose();
+    _unitController.dispose();
+    super.dispose();
   }
 
   @override
@@ -62,25 +70,25 @@ class _RecipeingredientState extends State<Recipeingredient> {
           SizedBox(width: 5),
           //INGREDIENT NAME
           MyTextField(
-              controller: nameController,
+              controller: _nameController,
               maxLength: 20,
               maxWidth: 130,
               hintText: "Ingredient name",
               onChanged: (value) => widget.onChange(
                   widget.ingredient,
-                  nameController.text,
-                  quantityController.text,
-                  unitController.text)),
+                  _nameController.text,
+                  _quantityController.text,
+                  _unitController.text)),
           SizedBox(width: 15),
           //INGREDIENT QUANTIY
           MyNumberField(
-            controller: quantityController,
+            controller: _quantityController,
             maxLength: 4,
             onChanged: (value) => widget.onChange(
                 widget.ingredient,
-                nameController.text,
-                quantityController.text,
-                unitController.text),
+                _nameController.text,
+                _quantityController.text,
+                _unitController.text),
           ),
           SizedBox(width: 10),
           //INGREDIENT UNIT
@@ -91,19 +99,19 @@ class _RecipeingredientState extends State<Recipeingredient> {
               setState(() {
                 selectedUnit = newValue;
               });
-              widget.onChange(widget.ingredient, nameController.text,
-                  quantityController.text, selectedUnit);
+              widget.onChange(widget.ingredient, _nameController.text,
+                  _quantityController.text, selectedUnit);
             },
           ),
           // MyTextField(
-          //   controller: unitController,
+          //   controller: _unitController,
           //   maxLength: 3,
           //   size: 18,
           //   onChanged: (value) => widget.onChange(
           //       widget.ingredient,
-          //       nameController.text,
-          //       quantityController.text,
-          //       unitController.text),
+          //       _nameController.text,
+          //       _quantityController.text,
+          //       _unitController.text),
           // )
         ],
       ),

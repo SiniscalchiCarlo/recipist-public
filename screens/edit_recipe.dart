@@ -40,6 +40,13 @@ class _EditRecipeState extends State<EditRecipe> {
     selectedImage = newRecipe.photo;
   }
 
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _notesController.dispose();
+    super.dispose();
+  }
+
   void setPersons(value) {
     setState(() {
       newRecipe.nperson = value;

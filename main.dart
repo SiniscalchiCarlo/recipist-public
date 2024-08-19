@@ -7,8 +7,10 @@ import 'package:smart_shopping_list/models/Ingredient.dart';
 import 'package:smart_shopping_list/models/ListRecipe.dart';
 import 'package:smart_shopping_list/models/Recipe.dart';
 import 'package:smart_shopping_list/models/ShopList.dart';
+import 'package:smart_shopping_list/screens/auth/auth_page.dart';
+import 'package:smart_shopping_list/screens/edit_shop_list.dart';
 import 'package:smart_shopping_list/screens/home_page.dart';
-import 'package:smart_shopping_list/screens/login_page.dart';
+import 'package:smart_shopping_list/screens/auth/login_page.dart';
 import 'package:smart_shopping_list/screens/recipes_page.dart';
 import 'package:smart_shopping_list/theme/theme_provider.dart';
 import 'package:uni_links/uni_links.dart';
@@ -44,6 +46,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   late StreamSubscription _sub;
   String? _currentPath;
+  String? _listId;
 
   @override
   void initState() {
@@ -57,6 +60,7 @@ class _MyAppState extends State<MyApp> {
       if (uri != null) {
         setState(() {
           _currentPath = uri.path;
+          _listId = uri.queryParameters['listId'];
         });
       }
     }, onError: (Object err) {
@@ -85,8 +89,10 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     Widget page;
     switch (_currentPath) {
-      case '/recipes':
-        page = RecipesPage();
+      case '/list':
+        //check login
+        page = HomePage();
+        //page = EditShopList(shopList: shopList);
         break;
       case '/':
       default:
