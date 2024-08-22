@@ -8,6 +8,7 @@ import 'package:smart_shopping_list/screens/edit_shop_list.dart';
 import 'package:smart_shopping_list/styling/my_action_button.dart';
 import 'package:smart_shopping_list/styling/my_card.dart';
 import 'package:smart_shopping_list/styling/my_text.dart';
+import 'package:uuid/uuid.dart';
 
 class ListPage extends StatefulWidget {
   const ListPage({super.key});
@@ -34,18 +35,18 @@ class _ListPageState extends State<ListPage> {
   }
 
   void addShopList() async {
-    int newId = getHighestId() + 1;
+    String newId = Uuid().v4().substring(0, 8);
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => EditShopList(
             shopList: ShopList(
-          name: "",
-          recipes: [],
-          recipesIngredients: [],
-          otherIngredients: [],
-          id: newId, //temporary id will be changed when the lis tis saved
-        )),
+                name: "",
+                recipes: [],
+                recipesIngredients: [],
+                otherIngredients: [],
+                id: newId,
+                shared: false)),
       ),
     );
     if (result != null && result != "delete") {

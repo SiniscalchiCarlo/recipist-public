@@ -15,12 +15,38 @@ class ShopList {
   @HiveField(3)
   List<Ingredient> otherIngredients;
   @HiveField(4)
-  int id;
+  String id;
+  @HiveField(5)
+  bool shared;
 
   ShopList(
       {required this.name,
       required this.recipes,
       required this.recipesIngredients,
       required this.otherIngredients,
-      required this.id});
+      required this.id,
+      required this.shared});
+
+  Map<String, dynamic> toMap() {
+    return {
+      "name": name,
+      "recipes": recipes.map((recipe) => recipe.toMap()).toList(),
+      "recipesIngredients": recipesIngredients.map((e) => e.toMap()).toList(),
+      "otherIngredients": otherIngredients.map((e) => e.toMap()).toList(),
+      "id": id,
+      "shared": shared
+    };
+  }
+
+  factory ShopList.fromMap(Map<String, dynamic> map) {
+    return ShopList(
+        name: map["name"],
+        recipes: map["recipes"].map((recipe) => recipe.fromMap()).toList(),
+        recipesIngredients:
+            map["recipesIngredients"].map((e) => e.fromMap()).toList(),
+        otherIngredients:
+            map["otherIngredients"].map((e) => e.fromMap()).toList(),
+        id: map["id"],
+        shared: map["shared"]);
+  }
 }

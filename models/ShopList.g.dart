@@ -21,14 +21,15 @@ class ShopListAdapter extends TypeAdapter<ShopList> {
       recipes: (fields[1] as List).cast<ListRecipe>(),
       recipesIngredients: (fields[2] as List).cast<Ingredient>(),
       otherIngredients: (fields[3] as List).cast<Ingredient>(),
-      id: fields[4] as int,
+      id: fields[4] as String,
+      shared: fields[5] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, ShopList obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -38,7 +39,9 @@ class ShopListAdapter extends TypeAdapter<ShopList> {
       ..writeByte(3)
       ..write(obj.otherIngredients)
       ..writeByte(4)
-      ..write(obj.id);
+      ..write(obj.id)
+      ..writeByte(5)
+      ..write(obj.shared);
   }
 
   @override

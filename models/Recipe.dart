@@ -16,7 +16,7 @@ class Recipe {
   @HiveField(4)
   List<Ingredient> ingredients;
   @HiveField(5)
-  int id;
+  String id;
 
   Recipe(
       {required this.name,
@@ -25,6 +25,29 @@ class Recipe {
       required this.ingredients,
       required this.id,
       this.imagePath});
+
+  Map<String, dynamic> toMap() {
+    return {
+      "name": name,
+      "notes": notes,
+      "nperson": nperson,
+      "ingredients":
+          ingredients.map((ingredient) => ingredient.toMap()).toList(),
+      "id": id,
+      "imagePath": imagePath
+    };
+  }
+
+  factory Recipe.fromMap(Map<String, dynamic> map) {
+    return Recipe(
+      name: map["name"],
+      notes: map["notes"],
+      nperson: map["nperson"],
+      ingredients:
+          map["ingredients"].map((ingredient) => ingredient.fromMap()).toList(),
+      id: map["id"],
+    );
+  }
 
   File? get photo => imagePath != null ? File(imagePath!) : null;
 }

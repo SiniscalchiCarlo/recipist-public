@@ -21,7 +21,7 @@ class RecipeAdapter extends TypeAdapter<Recipe> {
       notes: fields[1] as String,
       nperson: fields[2] as int,
       ingredients: (fields[4] as List).cast<Ingredient>(),
-      id: fields[5] as int,
+      id: fields[5] as String,
       imagePath: fields[3] as String?,
     );
   }

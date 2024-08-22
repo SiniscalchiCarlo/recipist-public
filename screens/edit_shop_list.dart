@@ -1,8 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:smart_shopping_list/components/recipeIngredient.dart';
 import 'package:smart_shopping_list/models/Ingredient.dart';
 import 'package:smart_shopping_list/models/ShopList.dart';
 import 'package:smart_shopping_list/screens/recipes_dialog.dart';
+import 'package:smart_shopping_list/services/firestore.dart';
 import 'package:smart_shopping_list/styling/my_button.dart';
 import 'package:smart_shopping_list/styling/my_counter.dart';
 import 'package:smart_shopping_list/styling/my_text.dart';
@@ -19,6 +22,8 @@ class EditShopList extends StatefulWidget {
 class _EditShopListState extends State<EditShopList> {
   late ShopList newList;
   late TextEditingController _nameController;
+  final CollectionReference listsDb =
+      FirebaseFirestore.instance.collection('shopping_lists');
 
   @override
   void initState() {
@@ -119,20 +124,84 @@ class _EditShopListState extends State<EditShopList> {
     }
   }
 
+  void shareList() {
+    //check if the user is logged in
+    // if (user == null) {
+    //   showDialog(
+    //       context: context,
+    //       builder: (context) {
+    //         return AlertDialog(
+    //           content:
+    //               Text('You need to be logged in to share a shopping list'),
+    //           actions: [
+    //             TextButton(
+    //               onPressed: () {
+    //                 Navigator.pop(context);
+    //               },
+    //               child: Text('Ok'),
+    //             ),
+    //           ],
+    //         );
+    //       });
+    // }
+
+    FirestoreService().saveListToDb(newList.id, newList);
+
+    String domain = "https://deeplink-on-server.vercel.app/recipes";
+    Share.share("${domain}/recipes/${newList.id}");
+  }
+
   @override
   Widget build(BuildContext context) {
     getListIngredients();
     return Scaffold(
+        appBar: AppBar(
+            title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            //DELETE AND SAVE LIST
+            Row(
+              children: [
+                MyButton(
+                    child: Icon(
+                      Icons.check,
+                      color: Colors.green,
+                      size: 20,
+                    ),
+                    onPressed: saveList),
+                SizedBox(
+                  width: 10,
+                ),
+                MyButton(
+                    child: Icon(
+                      Icons.delete_forever,
+                      color: Colors.red,
+                      size: 20,
+                    ),
+                    onPressed: deleteList),
+              ],
+            ),
+
+            //ADD PERSON BUTTON
+            IconButton(
+                onPressed: () => {shareList()},
+                icon: Icon(
+                  Icons.person_add,
+                  size: 40,
+                  color: Colors.grey.shade700,
+                ))
+          ],
+        )),
         backgroundColor: Theme.of(context).colorScheme.surface,
         body: Column(
           children: [
             Container(
-              margin: EdgeInsets.only(top: 40, left: 5, right: 10),
+              margin: EdgeInsets.only(left: 5, right: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(children: [
-                    Icon(Icons.image),
+                    Icon(Icons.receipt_long),
                     MyTextField(
                       controller: _nameController,
                       maxLength: 15,
@@ -140,34 +209,11 @@ class _EditShopListState extends State<EditShopList> {
                       maxWidth: 150,
                     )
                   ]),
-
-                  //DELETE AND SAVE LIST
-                  Column(
-                    children: [
-                      MyButton(
-                          child: Icon(
-                            Icons.check,
-                            color: Colors.green,
-                            size: 20,
-                          ),
-                          onPressed: saveList),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      MyButton(
-                          child: Icon(
-                            Icons.delete_forever,
-                            color: Colors.red,
-                            size: 20,
-                          ),
-                          onPressed: deleteList),
-                    ],
-                  )
                 ],
               ),
             ),
             SizedBox(height: 30),
-            MyText(text: "What do you want to cook?", size: 30),
+            MyText(text: "What do you want to cook?", size: 25),
 
             //RECIPES LIST
             Expanded(

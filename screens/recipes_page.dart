@@ -9,6 +9,7 @@ import 'package:smart_shopping_list/styling/my_action_button.dart';
 import 'package:smart_shopping_list/styling/my_card.dart';
 import 'package:smart_shopping_list/styling/my_text.dart';
 import 'package:smart_shopping_list/screens/edit_recipe.dart';
+import 'package:uuid/uuid.dart';
 
 class RecipesPage extends StatefulWidget {
   const RecipesPage({super.key});
@@ -35,7 +36,8 @@ class _RecipesPageState extends State<RecipesPage> {
   }
 
   void addRecipe() async {
-    int newId = getHighestId() + 1;
+    String newId = Uuid().v4().substring(0, 8);
+    ;
     final result = await Navigator.push(
       context,
       MaterialPageRoute(

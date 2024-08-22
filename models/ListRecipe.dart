@@ -9,4 +9,15 @@ class ListRecipe {
   @HiveField(1)
   int nperson;
   ListRecipe({required this.recipe, required this.nperson});
+
+  Map<String, dynamic> toMap() {
+    return {
+      "name": recipe.toMap(),
+      "quantity": nperson,
+    };
+  }
+
+  factory ListRecipe.fromMap(Map<String, dynamic> map) {
+    return ListRecipe(recipe: map["recipe"].fromMap(), nperson: map["nperson"]);
+  }
 }

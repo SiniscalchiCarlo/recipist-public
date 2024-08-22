@@ -12,6 +12,7 @@ import 'package:smart_shopping_list/screens/edit_shop_list.dart';
 import 'package:smart_shopping_list/screens/home_page.dart';
 import 'package:smart_shopping_list/screens/auth/login_page.dart';
 import 'package:smart_shopping_list/screens/recipes_page.dart';
+import 'package:smart_shopping_list/services/firestore.dart';
 import 'package:smart_shopping_list/theme/theme_provider.dart';
 import 'package:uni_links/uni_links.dart';
 import 'dart:async';
@@ -90,9 +91,53 @@ class _MyAppState extends State<MyApp> {
     Widget page;
     switch (_currentPath) {
       case '/list':
-        //check login
-        page = HomePage();
-        //page = EditShopList(shopList: shopList);
+        page = FutureBuilder(
+            future: FirestoreService().getListFromDb(_listId ?? ""),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                // While the future is resolving, show a loading indicator
+                return Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                // If there's an error, show an error message
+                return AlertDialog(
+                  content: Text('Failed to load the shopping list.'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return AuthPage();
+                        }));
+                      },
+                      child: Text('OK'),
+                    ),
+                  ],
+                );
+              } else if (!snapshot.hasData || snapshot.data == null) {
+                // If the snapshot has no data, show an alert
+                return AlertDialog(
+                  content: Text('This shopping list does not exist.'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return AuthPage();
+                        }));
+                      },
+                      child: Text('OK'),
+                    ),
+                  ],
+                );
+              } else {
+                // If data is successfully retrieved, show the EditShopList page
+                Map<String, dynamic> data =
+                    snapshot.data as Map<String, dynamic>;
+                ShopList shopList = ShopList.fromMap(data);
+                return EditShopList(shopList: shopList);
+              }
+            });
+
         break;
       case '/':
       default:
