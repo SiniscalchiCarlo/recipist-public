@@ -39,12 +39,14 @@ class Recipe {
   }
 
   factory Recipe.fromMap(Map<String, dynamic> map) {
+    final List<Ingredient> ingredients = (map["ingredients"] as List)
+        .map<Ingredient>((ingredient) => Ingredient.fromMap(ingredient))
+        .toList();
     return Recipe(
       name: map["name"],
       notes: map["notes"],
       nperson: map["nperson"],
-      ingredients:
-          map["ingredients"].map((ingredient) => ingredient.fromMap()).toList(),
+      ingredients: ingredients,
       id: map["id"],
     );
   }

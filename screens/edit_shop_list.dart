@@ -132,7 +132,7 @@ class _EditShopListState extends State<EditShopList> {
     }
   }
 
-  void shareList() {
+  void shareList() async {
     //check if the user is logged in
     // if (user == null) {
     //   showDialog(
@@ -152,8 +152,9 @@ class _EditShopListState extends State<EditShopList> {
     //         );
     //       });
     // }
+    newList.name = _nameController.text;
     newList.shared = true;
-    FirestoreService().saveListToDb(newList.id, newList);
+    await FirestoreService().saveListToDb(newList.id, newList);
 
     String domain = "https://deeplink-on-server.vercel.app/list";
     Share.share("${domain}?listId=${newList.id}");

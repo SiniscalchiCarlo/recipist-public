@@ -135,8 +135,11 @@ class _MyAppState extends State<MyApp> {
                 );
               } else {
                 // If data is successfully retrieved, show the EditShopList page
+                var documentSnapshot = snapshot.data;
                 Map<String, dynamic> data =
-                    snapshot.data! as Map<String, dynamic>;
+                    documentSnapshot!.data() as Map<String, dynamic>;
+                printWarning("DATA");
+                print(data);
                 ShopList shopList = ShopList.fromMap(data);
                 return EditShopList(shopList: shopList);
               }

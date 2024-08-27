@@ -12,12 +12,13 @@ class ListRecipe {
 
   Map<String, dynamic> toMap() {
     return {
-      "name": recipe.toMap(),
-      "quantity": nperson,
+      "recipe": recipe.toMap(),
+      "nperson": nperson,
     };
   }
 
   factory ListRecipe.fromMap(Map<String, dynamic> map) {
-    return ListRecipe(recipe: map["recipe"].fromMap(), nperson: map["nperson"]);
+    return ListRecipe(
+        recipe: Recipe.fromMap(map["recipe"]), nperson: map["nperson"]);
   }
 }

@@ -39,13 +39,22 @@ class ShopList {
   }
 
   factory ShopList.fromMap(Map<String, dynamic> map) {
+    final List<ListRecipe> recipes = (map["recipes"] as List)
+        .map<ListRecipe>((recipe) => ListRecipe.fromMap(recipe))
+        .toList();
+    final List<Ingredient> recipesIngredients =
+        (map["recipesIngredients"] as List)
+            .map<Ingredient>((ingredient) => Ingredient.fromMap(ingredient))
+            .toList();
+    final List<Ingredient> otherIngredients = (map["otherIngredients"] as List)
+        .map<Ingredient>((ingredient) => Ingredient.fromMap(ingredient))
+        .toList();
+
     return ShopList(
         name: map["name"],
-        recipes: map["recipes"].map((recipe) => recipe.fromMap()).toList(),
-        recipesIngredients:
-            map["recipesIngredients"].map((e) => e.fromMap()).toList(),
-        otherIngredients:
-            map["otherIngredients"].map((e) => e.fromMap()).toList(),
+        recipes: recipes,
+        recipesIngredients: recipesIngredients,
+        otherIngredients: otherIngredients,
         id: map["id"],
         shared: map["shared"]);
   }
