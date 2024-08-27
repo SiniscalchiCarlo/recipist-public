@@ -39,14 +39,22 @@ class _EditShopListState extends State<EditShopList> {
     super.dispose();
   }
 
-  void saveList() {
+  void saveList() async {
     newList.name = _nameController.text;
     final result = newList;
+    if (newList.shared) {
+      await FirestoreService().saveListToDb(newList.id, newList);
+    }
     Navigator.pop(context, result);
   }
 
-  void deleteList() {
+  void deleteList() async {
     final result = "delete";
+
+    if (newList.shared) {
+      await FirestoreService().deleteListFromDb(newList.id);
+    }
+
     Navigator.pop(context, result);
   }
 
@@ -144,11 +152,11 @@ class _EditShopListState extends State<EditShopList> {
     //         );
     //       });
     // }
-
+    newList.shared = true;
     FirestoreService().saveListToDb(newList.id, newList);
 
-    String domain = "https://deeplink-on-server.vercel.app/recipes";
-    Share.share("${domain}/recipes/${newList.id}");
+    String domain = "https://deeplink-on-server.vercel.app/list";
+    Share.share("${domain}?listId=${newList.id}");
   }
 
   @override

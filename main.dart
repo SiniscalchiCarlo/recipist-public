@@ -8,6 +8,7 @@ import 'package:smart_shopping_list/models/ListRecipe.dart';
 import 'package:smart_shopping_list/models/Recipe.dart';
 import 'package:smart_shopping_list/models/ShopList.dart';
 import 'package:smart_shopping_list/screens/auth/auth_page.dart';
+import 'package:smart_shopping_list/screens/edit_recipe.dart';
 import 'package:smart_shopping_list/screens/edit_shop_list.dart';
 import 'package:smart_shopping_list/screens/home_page.dart';
 import 'package:smart_shopping_list/screens/auth/login_page.dart';
@@ -73,6 +74,7 @@ class _MyAppState extends State<MyApp> {
       if (uri != null) {
         setState(() {
           _currentPath = uri.path;
+          _listId = uri.queryParameters['listId'];
         });
       }
     }).catchError((err) {
@@ -89,8 +91,10 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     Widget page;
+    printWarning("CURRENT PATH $_currentPath");
     switch (_currentPath) {
       case '/list':
+        printWarning("list id $_listId");
         page = FutureBuilder(
             future: FirestoreService().getListFromDb(_listId ?? ""),
             builder: (context, snapshot) {
@@ -132,7 +136,7 @@ class _MyAppState extends State<MyApp> {
               } else {
                 // If data is successfully retrieved, show the EditShopList page
                 Map<String, dynamic> data =
-                    snapshot.data as Map<String, dynamic>;
+                    snapshot.data! as Map<String, dynamic>;
                 ShopList shopList = ShopList.fromMap(data);
                 return EditShopList(shopList: shopList);
               }

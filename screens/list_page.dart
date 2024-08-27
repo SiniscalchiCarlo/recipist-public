@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:smart_shopping_list/components/user_app_bar.dart';
 import 'package:smart_shopping_list/models/ShopList.dart';
+import 'package:smart_shopping_list/screens/edit_recipe.dart';
 import 'package:smart_shopping_list/screens/edit_shop_list.dart';
 import 'package:smart_shopping_list/styling/my_action_button.dart';
 import 'package:smart_shopping_list/styling/my_card.dart';
@@ -73,10 +74,12 @@ class _ListPageState extends State<ListPage> {
     }
 
     if (result == "delete") {
+      printWarning("INDEX $index ${shopLists.length}");
       shopListBox.delete(shopLists[index].id);
       setState(() {
         shopLists.removeAt(index);
       });
+      printWarning("INDEX $index ${shopLists.length}");
     }
   }
 
