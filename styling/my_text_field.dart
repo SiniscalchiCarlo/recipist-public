@@ -24,6 +24,10 @@ class MyTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.only(left: 4),
+      decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey.shade500),
+          borderRadius: BorderRadius.circular(10)),
       constraints: BoxConstraints(
         maxWidth: maxWidth ??
             (maxLength * (size ?? 18) * 0.6), // Set the maximum width here
@@ -32,11 +36,16 @@ class MyTextField extends StatelessWidget {
         onChanged: onChanged,
         maxLength: maxLength,
         controller: controller,
-        style: GoogleFonts.dmSerifText(
-          fontSize: size ?? 18,
+        style: GoogleFonts.outfit(
+          fontSize: size ?? 16,
           color: Theme.of(context).colorScheme.inversePrimary,
         ),
-        decoration: InputDecoration(counterText: "", hintText: hintText),
+        decoration: InputDecoration(
+            counterText: "",
+            border: InputBorder.none,
+            hintText: hintText,
+            contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+            hintStyle: TextStyle(color: Colors.grey.shade400)),
       ),
     );
   }

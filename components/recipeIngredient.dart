@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smart_shopping_list/models/Ingredient.dart';
 import 'package:smart_shopping_list/models/Recipe.dart';
+import 'package:smart_shopping_list/styling/my_button.dart';
 import 'package:smart_shopping_list/styling/my_check_bok.dart';
 import 'package:smart_shopping_list/styling/my_drop_down.dart';
 import 'package:smart_shopping_list/styling/my_number_input.dart';
@@ -8,13 +9,18 @@ import 'package:smart_shopping_list/styling/my_text_field.dart';
 
 class Recipeingredient extends StatefulWidget {
   final Function onChange;
+  final Function deleteIngredient;
   final Ingredient ingredient;
   final bool check;
-  const Recipeingredient(
-      {super.key,
-      required this.onChange,
-      required this.ingredient,
-      required this.check});
+  final int index;
+  const Recipeingredient({
+    super.key,
+    required this.onChange,
+    required this.ingredient,
+    required this.check,
+    required this.deleteIngredient,
+    required this.index,
+  });
 
   @override
   State<Recipeingredient> createState() => _RecipeingredientState();
@@ -73,6 +79,7 @@ class _RecipeingredientState extends State<Recipeingredient> {
               controller: _nameController,
               maxLength: 20,
               maxWidth: 130,
+              hintText: "Ingredient",
               onChanged: (value) => widget.onChange(
                   widget.ingredient,
                   _nameController.text,
@@ -102,16 +109,20 @@ class _RecipeingredientState extends State<Recipeingredient> {
                   _quantityController.text, selectedUnit);
             },
           ),
-          // MyTextField(
-          //   controller: _unitController,
-          //   maxLength: 3,
-          //   size: 18,
-          //   onChanged: (value) => widget.onChange(
-          //       widget.ingredient,
-          //       _nameController.text,
-          //       _quantityController.text,
-          //       _unitController.text),
-          // )
+          SizedBox(width: 10),
+          //DELETE BUTTON
+          GestureDetector(
+            onTap: () => widget.deleteIngredient(widget.index),
+            child: Container(
+                padding: EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                    color: Colors.orange.shade100,
+                    borderRadius: BorderRadius.circular(10)),
+                child: Icon(
+                  Icons.delete,
+                  color: Colors.orange,
+                )),
+          )
         ],
       ),
     );

@@ -5,12 +5,10 @@ class MyCounter extends StatefulWidget {
   final Function onPressed;
   final double? size;
   final int startValue;
-  final Widget? child;
   const MyCounter(
       {super.key,
       required this.onPressed,
       required this.startValue,
-      this.child,
       this.size});
 
   @override
@@ -29,29 +27,24 @@ class _MyCounterState extends State<MyCounter> {
   Widget build(BuildContext context) {
     return Row(
       children: [
+        IconButton(
+            onPressed: () {
+              numberPersons -= 1;
+              widget.onPressed(numberPersons);
+            },
+            icon: Icon(Icons.keyboard_arrow_left,
+                size: widget.size != null ? (widget.size! + 10) : 30)),
         MyText(
           text: "$numberPersons",
           size: (widget.size) ?? 18,
         ),
-        widget.child ?? SizedBox.shrink(),
-        Column(
-          children: [
-            IconButton(
-                onPressed: () {
-                  numberPersons += 1;
-                  widget.onPressed(numberPersons);
-                },
-                icon: Icon(Icons.keyboard_arrow_up,
-                    size: widget.size != null ? (widget.size! + 10) : 30)),
-            IconButton(
-                onPressed: () {
-                  numberPersons -= 1;
-                  widget.onPressed(numberPersons);
-                },
-                icon: Icon(Icons.keyboard_arrow_down,
-                    size: widget.size != null ? (widget.size! + 10) : 30))
-          ],
-        )
+        IconButton(
+            onPressed: () {
+              numberPersons += 1;
+              widget.onPressed(numberPersons);
+            },
+            icon: Icon(Icons.keyboard_arrow_right,
+                size: widget.size != null ? (widget.size! + 10) : 30)),
       ],
     );
   }

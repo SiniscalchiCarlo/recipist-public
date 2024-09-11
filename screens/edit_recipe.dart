@@ -75,6 +75,12 @@ class _EditRecipeState extends State<EditRecipe> {
     Navigator.pop(context, result);
   }
 
+  void deleteIngredient(index) {
+    setState(() {
+      newRecipe.ingredients.removeAt(index);
+    });
+  }
+
   void addIngredient() {
     setState(() {
       newRecipe.ingredients
@@ -97,73 +103,57 @@ class _EditRecipeState extends State<EditRecipe> {
         backgroundColor: Theme.of(context).colorScheme.surface,
         body: Column(children: [
           //RECIPE TITLE AND IMAGE
-          Container(
-            margin: EdgeInsets.only(top: 40, left: 5, right: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(children: [
-                  //RECIPE PHOTO
-                  OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                        shape: CircleBorder(),
-                        padding: selectedImage != null
-                            ? EdgeInsets.all(0)
-                            : EdgeInsets.all(15),
-                        backgroundColor: Colors
-                            .white, // <-- Button color // <-- Splash color
-                      ),
-                      onPressed: () {
-                        PickImageFromCamera();
-                      },
-                      child: selectedImage != null
-                          ? ClipOval(
-                              child: SizedBox.fromSize(
-                                size: Size.fromRadius(30), // Image radius
-                                child: Image.file(
-                                  selectedImage!,
-                                  fit: BoxFit
-                                      .cover, // Ensures the image fills the circle
-                                ),
-                              ),
-                            )
-                          : Icon(
-                              Icons.add_a_photo_rounded,
-                              color: Colors.grey,
-                              size: 30.0,
-                            )),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  MyTextField(
-                    controller: _nameController,
-                    maxLength: 15,
-                    size: 20,
-                    maxWidth: 150,
-                  )
-                ]),
+          Center(
+            child: Column(children: [
+              SizedBox(
+                height: 50,
+              ),
+              //RECIPE PHOTO
+              OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    shape: CircleBorder(),
+                    padding: selectedImage != null
+                        ? EdgeInsets.all(0)
+                        : EdgeInsets.all(30),
+                    backgroundColor: Colors.white,
 
-                //DELETE AND SAVE RECIPE
-                Column(
-                  children: [
-                    MyButton(
-                        child: Icon(
-                          Icons.check,
-                          color: Colors.green,
-                          size: 20,
-                        ),
-                        onPressed: saveRecipe),
-                    MyButton(
-                        child: Icon(
-                          Icons.delete_forever,
-                          color: Colors.red,
-                          size: 20,
-                        ),
-                        onPressed: deleteRecipe),
-                  ],
-                )
-              ],
-            ),
+                    side: BorderSide(
+                      color: Colors.amber, // Border color
+                      width: 1, // Border width
+                    ),
+                    elevation: 7, // Shadow effect
+                    shadowColor: Colors.orange.withOpacity(0.5),
+                  ),
+                  onPressed: () {
+                    PickImageFromCamera();
+                  },
+                  child: selectedImage != null
+                      ? ClipOval(
+                          child: SizedBox.fromSize(
+                            size: Size.fromRadius(50),
+                            child: Image.file(
+                              selectedImage!,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        )
+                      : Icon(
+                          Icons.add_a_photo_rounded,
+                          color: Colors.grey,
+                          size: 30.0,
+                        )),
+              SizedBox(
+                height: 10,
+              ),
+
+              //RECIPE TITLE
+              MyTextField(
+                controller: _nameController,
+                maxLength: 25,
+                maxWidth: 200,
+                hintText: "Recipe Name...",
+              )
+            ]),
           ),
 
           //NUMBER OF PERSONS
@@ -180,7 +170,6 @@ class _EditRecipeState extends State<EditRecipe> {
                   newRecipe.nperson = value;
                 }),
                 startValue: newRecipe.nperson,
-                child: Icon(Icons.person, size: 30),
               )
             ],
           ),
@@ -191,23 +180,30 @@ class _EditRecipeState extends State<EditRecipe> {
                   itemBuilder: (context, index) {
                     if (index < newRecipe.ingredients.length) {
                       return Recipeingredient(
-                        ingredient: newRecipe.ingredients[index],
-                        onChange: onChange,
-                        check: false,
-                      );
+                          ingredient: newRecipe.ingredients[index],
+                          index: index,
+                          onChange: onChange,
+                          check: false,
+                          deleteIngredient: deleteIngredient);
                     } else {
                       return Column(
                         children: [
                           //ADD NEW INGREDIENT BUTTON
                           SizedBox(
-                            height: 10,
+                            height: 20,
                           ),
-                          MyActionButton(onPressed: addIngredient, text: "+"),
+                          MyButton(
+                              child: MyText(
+                                text: "+ Add Ingredient",
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                              onPressed: addIngredient),
                           SizedBox(
-                            height: 10,
+                            height: 30,
                           ),
                           MyText(text: "Notes", size: 25),
                           Container(
+                            height: 150,
                             margin: EdgeInsets.all(10),
                             child: TextField(
                                 controller: _notesController,
@@ -215,8 +211,30 @@ class _EditRecipeState extends State<EditRecipe> {
                                 keyboardType: TextInputType.multiline,
                                 decoration: const InputDecoration(
                                     contentPadding: EdgeInsets.all(10.0),
-                                    hintText: "Enter your notes here",
+                                    hintText: "Recipe Steps...",
                                     border: OutlineInputBorder())),
+                          ),
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              MyButton(
+                                  child: MyText(
+                                    text: "Delete",
+                                    color: Colors.red,
+                                  ),
+                                  onPressed: deleteRecipe),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              MyButton(
+                                  child: MyText(
+                                    text: "Save",
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  ),
+                                  onPressed: saveRecipe),
+                            ],
                           )
                         ],
                       );

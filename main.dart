@@ -96,55 +96,61 @@ class _MyAppState extends State<MyApp> {
       case '/list':
         printWarning("list id $_listId");
         page = FutureBuilder(
-            future: FirestoreService().getListFromDb(_listId ?? ""),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                // While the future is resolving, show a loading indicator
-                return Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                // If there's an error, show an error message
-                return AlertDialog(
-                  content: Text('Failed to load the shopping list.'),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return AuthPage();
-                        }));
-                      },
-                      child: Text('OK'),
-                    ),
-                  ],
-                );
-              } else if (!snapshot.hasData || snapshot.data == null) {
-                // If the snapshot has no data, show an alert
-                return AlertDialog(
-                  content: Text('This shopping list does not exist.'),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return AuthPage();
-                        }));
-                      },
-                      child: Text('OK'),
-                    ),
-                  ],
-                );
-              } else {
-                // If data is successfully retrieved, show the EditShopList page
-                var documentSnapshot = snapshot.data;
-                Map<String, dynamic> data =
-                    documentSnapshot!.data() as Map<String, dynamic>;
-                printWarning("DATA");
-                print(data);
-                ShopList shopList = ShopList.fromMap(data);
-                return EditShopList(shopList: shopList);
-              }
-            });
-
+          future: FirestoreService().getListFromDb(_listId ?? ""),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              // While the future is resolving, show the loading GIF
+              return Container(
+                color: Colors.white, // Set the background color to white
+                child: Center(
+                  child: Image.asset(
+                      'assets/cooking_loading.gif'), // Load your GIF here
+                ),
+              );
+            } else if (snapshot.hasError) {
+              // If there's an error, show an error message
+              return AlertDialog(
+                content: Text('Failed to load the shopping list.'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return AuthPage();
+                      }));
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              );
+            } else if (!snapshot.hasData || snapshot.data == null) {
+              // If the snapshot has no data, show an alert
+              return AlertDialog(
+                content: Text('This shopping list does not exist.'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return AuthPage();
+                      }));
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              );
+            } else {
+              // If data is successfully retrieved, show the EditShopList page
+              var documentSnapshot = snapshot.data;
+              Map<String, dynamic> data =
+                  documentSnapshot!.data() as Map<String, dynamic>;
+              printWarning("DATA");
+              print(data);
+              ShopList shopList = ShopList.fromMap(data);
+              return EditShopList(shopList: shopList);
+            }
+          },
+        );
         break;
       case '/':
       default:
@@ -153,6 +159,7 @@ class _MyAppState extends State<MyApp> {
     }
 
     return MaterialApp(
+      theme: Provider.of<ThemeProvider>(context).themeData,
       home: page,
     );
   }

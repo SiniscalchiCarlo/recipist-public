@@ -132,6 +132,12 @@ class _EditShopListState extends State<EditShopList> {
     }
   }
 
+  void deleteIngredient(index) {
+    setState(() {
+      newList.recipesIngredients.removeAt(index);
+    });
+  }
+
   void shareList() async {
     //check if the user is logged in
     // if (user == null) {
@@ -241,15 +247,15 @@ class _EditShopListState extends State<EditShopList> {
                             MyText(text: newList.recipes[index].recipe.name),
                             SizedBox(width: 20),
                             MyCounter(
-                                size: 20,
-                                onPressed: (value) {
-                                  setState(() {
-                                    newList.recipes[index].nperson = value;
-                                  });
-                                  getListIngredients();
-                                },
-                                startValue: newList.recipes[index].nperson,
-                                child: Icon(Icons.person, size: 30)),
+                              size: 20,
+                              onPressed: (value) {
+                                setState(() {
+                                  newList.recipes[index].nperson = value;
+                                });
+                                getListIngredients();
+                              },
+                              startValue: newList.recipes[index].nperson,
+                            ),
                             SizedBox(width: 20),
                             IconButton(
                               onPressed: () => deleteRecipe(index),
@@ -281,6 +287,8 @@ class _EditShopListState extends State<EditShopList> {
                         check: true,
                         ingredient: newList.recipesIngredients[index],
                         onChange: () {},
+                        deleteIngredient: deleteIngredient,
+                        index: index,
                       );
                     })),
           ],
