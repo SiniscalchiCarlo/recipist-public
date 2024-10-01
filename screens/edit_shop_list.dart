@@ -172,61 +172,41 @@ class _EditShopListState extends State<EditShopList> {
     return Scaffold(
         appBar: AppBar(
             title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            //DELETE AND SAVE LIST
+            //ADD PERSON BUTTON
             Row(
               children: [
-                MyButton(
-                    child: Icon(
-                      Icons.check,
-                      color: Colors.green,
-                      size: 20,
-                    ),
-                    onPressed: saveList),
-                SizedBox(
-                  width: 10,
-                ),
-                MyButton(
-                    child: Icon(
-                      Icons.delete_forever,
-                      color: Colors.red,
-                      size: 20,
-                    ),
-                    onPressed: deleteList),
+                IconButton(
+                    onPressed: () => {shareList()},
+                    icon: Icon(
+                      Icons.person_add,
+                      size: 40,
+                      color: Colors.grey.shade700,
+                    ))
               ],
-            ),
-
-            //ADD PERSON BUTTON
-            IconButton(
-                onPressed: () => {shareList()},
-                icon: Icon(
-                  Icons.person_add,
-                  size: 40,
-                  color: Colors.grey.shade700,
-                ))
+            )
           ],
         )),
         backgroundColor: Theme.of(context).colorScheme.surface,
         body: Column(
           children: [
-            Container(
-              margin: EdgeInsets.only(left: 5, right: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(children: [
-                    Icon(Icons.receipt_long),
-                    MyTextField(
-                      controller: _nameController,
-                      maxLength: 15,
-                      size: 20,
-                      maxWidth: 150,
-                    )
-                  ]),
-                ],
+            //SHOPPING LIST NAME
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Icon(
+                Icons.receipt_long,
+                size: 35,
               ),
-            ),
+              SizedBox(
+                width: 5,
+              ),
+              MyTextField(
+                controller: _nameController,
+                maxLength: 15,
+                size: 20,
+                maxWidth: 150,
+              )
+            ]),
             SizedBox(height: 30),
             MyText(text: "What do you want to cook?", size: 25),
 
@@ -259,20 +239,23 @@ class _EditShopListState extends State<EditShopList> {
                             SizedBox(width: 20),
                             IconButton(
                               onPressed: () => deleteRecipe(index),
-                              icon: Icon(
-                                Icons.delete_forever_outlined,
-                                size: 30,
-                                color: Colors.red.shade700,
-                              ),
+                              icon: Container(
+                                  padding: EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                      color: Colors.orange.shade100,
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Icon(
+                                    Icons.delete,
+                                    color: Colors.orange,
+                                  )),
                             )
                           ]);
                     } else {
                       return Center(
                         child: MyButton(
-                            child: Icon(
-                              Icons.add,
-                              color:
-                                  Theme.of(context).colorScheme.inversePrimary,
+                            child: MyText(
+                              text: "+ Add Recipe",
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                             onPressed: addRecipe),
                       );
@@ -291,6 +274,32 @@ class _EditShopListState extends State<EditShopList> {
                         index: index,
                       );
                     })),
+            SizedBox(
+              height: 20,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                MyButton(
+                    child: MyText(
+                      text: "Delete",
+                      color: Colors.red,
+                    ),
+                    onPressed: saveList),
+                SizedBox(
+                  width: 5,
+                ),
+                MyButton(
+                    child: MyText(
+                      text: "Save",
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    onPressed: deleteList),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
           ],
         ));
   }
