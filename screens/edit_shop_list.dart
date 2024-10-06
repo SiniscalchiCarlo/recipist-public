@@ -155,6 +155,12 @@ class _EditShopListState extends State<EditShopList> {
     });
   }
 
+  void onChange(ingredient, name, quantity, unit) {
+    ingredient.name = name;
+    ingredient.quantity = quantity;
+    ingredient.unit = unit;
+  }
+
   void shareList() async {
     //check if the user is logged in
     // if (user == null) {
@@ -185,7 +191,7 @@ class _EditShopListState extends State<EditShopList> {
 
   @override
   Widget build(BuildContext context) {
-    getListIngredients();
+    //getListIngredients();
     return Scaffold(
         appBar: AppBar(
             title: Row(
@@ -286,7 +292,7 @@ class _EditShopListState extends State<EditShopList> {
                       return Recipeingredient(
                         check: true,
                         ingredient: newList.recipesIngredients[index],
-                        onChange: () {},
+                        onChange: onChange,
                         deleteIngredient: deleteIngredient,
                         index: index,
                       );
