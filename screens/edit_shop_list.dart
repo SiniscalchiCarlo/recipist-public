@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:smart_shopping_list/components/recipeIngredient.dart';
 import 'package:smart_shopping_list/models/Ingredient.dart';
+import 'package:smart_shopping_list/models/Recipe.dart';
 import 'package:smart_shopping_list/models/ShopList.dart';
 import 'package:smart_shopping_list/screens/recipes_dialog.dart';
 import 'package:smart_shopping_list/services/firestore.dart';
@@ -24,19 +26,34 @@ class _EditShopListState extends State<EditShopList> {
   late TextEditingController _nameController;
   final CollectionReference listsDb =
       FirebaseFirestore.instance.collection('shopping_lists');
-
+  List<Recipe> myRecipes =
+      Hive.box<Recipe>("recipes").values.cast<Recipe>().toList();
   @override
   void initState() {
     super.initState();
     newList = widget.shopList;
 
     _nameController = TextEditingController(text: newList.name);
+
+    if (newList.recipes.length > 0) {
+      refreshRecipes();
+    }
   }
 
   @override
   void dispose() {
     _nameController.dispose();
     super.dispose();
+  }
+
+  void refreshRecipes() {
+    for (var i = 0; i < newList.recipes.length; i++) {
+      int recipeIndex =
+          myRecipes.indexWhere((obj) => obj.id == newList.recipes[i].recipe.id);
+      if (recipeIndex != -1) {
+        newList.recipes[i].recipe = myRecipes[recipeIndex];
+      }
+    }
   }
 
   void saveList() async {
@@ -294,7 +311,7 @@ class _EditShopListState extends State<EditShopList> {
                       text: "Save",
                       color: Theme.of(context).colorScheme.primary,
                     ),
-                    onPressed: deleteList),
+                    onPressed: saveList),
               ],
             ),
             SizedBox(
