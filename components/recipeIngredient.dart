@@ -68,7 +68,15 @@ class _RecipeingredientState extends State<Recipeingredient> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           widget.check
-              ? MyCheckBok()
+              ? MyCheckBok(
+                  initialValue: widget.ingredient.checked,
+                  onChanged: (bool? newValue) {
+                    setState(() {
+                      widget.ingredient.checked =
+                          newValue ?? false; // Update ingredient.checked
+                    });
+                  },
+                )
               : Icon(
                   Icons.circle,
                   size: 12,

@@ -12,6 +12,21 @@ import 'package:smart_shopping_list/styling/my_button.dart';
 import 'package:smart_shopping_list/styling/my_counter.dart';
 import 'package:smart_shopping_list/styling/my_text.dart';
 import 'package:smart_shopping_list/styling/my_text_field.dart';
+import 'package:android_id/android_id.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'dart:io' show Platform;
+
+Future<String?> _getId() async {
+  var deviceInfo = DeviceInfoPlugin();
+  if (Platform.isIOS) {
+    // import 'dart:io'
+    var iosDeviceInfo = await deviceInfo.iosInfo;
+    return iosDeviceInfo.identifierForVendor; // unique ID on iOS
+  } else if (Platform.isAndroid) {
+    var androidDeviceInfo = await deviceInfo.androidInfo;
+    return AndroidId().getId(); // unique ID on Android
+  }
+}
 
 class EditShopList extends StatefulWidget {
   final ShopList shopList;
@@ -28,6 +43,8 @@ class _EditShopListState extends State<EditShopList> {
       FirebaseFirestore.instance.collection('shopping_lists');
   List<Recipe> myRecipes =
       Hive.box<Recipe>("recipes").values.cast<Recipe>().toList();
+  String? deviceId;
+
   @override
   void initState() {
     super.initState();
@@ -35,7 +52,17 @@ class _EditShopListState extends State<EditShopList> {
 
     _nameController = TextEditingController(text: newList.name);
 
-    if (newList.recipes.length > 0) {
+    _initializeAsyncData();
+  }
+
+  Future<void> _initializeAsyncData() async {
+    if (newList.shared) {
+      deviceId = await _getId();
+      if (!newList.members.contains(deviceId)) {
+        newList.members.add(deviceId ?? "");
+      }
+    }
+    if (newList.recipes.isNotEmpty) {
       refreshRecipes();
     }
   }
@@ -69,7 +96,9 @@ class _EditShopListState extends State<EditShopList> {
     final result = "delete";
 
     if (newList.shared) {
-      await FirestoreService().deleteListFromDb(newList.id);
+      if (newList.members.length == 1 && newList.members.contains(deviceId)) {
+        await FirestoreService().deleteListFromDb(newList.id);
+      }
     }
 
     Navigator.pop(context, result);
@@ -183,10 +212,18 @@ class _EditShopListState extends State<EditShopList> {
     // }
     newList.name = _nameController.text;
     newList.shared = true;
+    newList.members = [deviceId ?? ""];
     await FirestoreService().saveListToDb(newList.id, newList);
 
     String domain = "https://deeplink-on-server.vercel.app/list";
     Share.share("${domain}?listId=${newList.id}");
+  }
+
+  void addOtherIngredient() {
+    setState(() {
+      newList.otherIngredients
+          .add(Ingredient(name: "", quantity: "0", unit: "unit"));
+    });
   }
 
   @override
@@ -289,13 +326,28 @@ class _EditShopListState extends State<EditShopList> {
                 child: ListView.builder(
                     itemCount: newList.recipesIngredients.length,
                     itemBuilder: (context, index) {
-                      return Recipeingredient(
-                        check: true,
-                        ingredient: newList.recipesIngredients[index],
-                        onChange: onChange,
-                        deleteIngredient: deleteIngredient,
-                        index: index,
-                      );
+                      if (index < newList.recipesIngredients.length) {
+                        return Recipeingredient(
+                          check: true,
+                          ingredient: newList.recipesIngredients[index],
+                          onChange: onChange,
+                          deleteIngredient: deleteIngredient,
+                          index: index,
+                        );
+                      } else {
+                        return Column(children: [
+                          //ADD NEW INGREDIENT BUTTON
+                          SizedBox(
+                            height: 20,
+                          ),
+                          MyButton(
+                              child: MyText(
+                                text: "+ Add Ingredient",
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                              onPressed: addOtherIngredient)
+                        ]);
+                      }
                     })),
             SizedBox(
               height: 20,
@@ -308,7 +360,7 @@ class _EditShopListState extends State<EditShopList> {
                       text: "Delete",
                       color: Colors.red,
                     ),
-                    onPressed: saveList),
+                    onPressed: deleteList),
                 SizedBox(
                   width: 5,
                 ),

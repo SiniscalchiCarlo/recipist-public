@@ -29,9 +29,10 @@ void main() async {
   Hive.registerAdapter(ListRecipeAdapter());
   Hive.registerAdapter(ShopListAdapter());
 
-  await Hive.openBox<Recipe>('recipes');
-  await Hive.openBox<ShopList>('shopLists');
-
+  var box1 = await Hive.openBox<Recipe>('recipes');
+  var box2 = await Hive.openBox<ShopList>('shopLists');
+  // await box1.clear();
+  // await box2.clear();
   runApp(ChangeNotifierProvider(
     create: (context) => ThemeProvider(),
     child: const MyApp(),

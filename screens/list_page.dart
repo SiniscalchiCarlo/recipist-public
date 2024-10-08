@@ -47,7 +47,8 @@ class _ListPageState extends State<ListPage> {
                 recipesIngredients: [],
                 otherIngredients: [],
                 id: newId,
-                shared: false)),
+                shared: false,
+                members: [])),
       ),
     );
     if (result != null && result != "delete") {
@@ -66,6 +67,7 @@ class _ListPageState extends State<ListPage> {
         builder: (context) => EditShopList(shopList: shopLists[index]),
       ),
     );
+
     if (result != null && result != "delete") {
       shopListBox.put(shopLists[index].id, result);
       setState(() {

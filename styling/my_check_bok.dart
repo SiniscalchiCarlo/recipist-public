@@ -29,7 +29,7 @@ class _MyCheckBokState extends State<MyCheckBok> {
           isChecked = value;
         });
         if (widget.onChanged != null) {
-          widget.onChanged!(); // Use ! to call the non-null function
+          widget.onChanged!(value); // Pass the new value to the parent
         }
       },
     );

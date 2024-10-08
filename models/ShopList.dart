@@ -18,6 +18,8 @@ class ShopList {
   String id;
   @HiveField(5)
   bool shared;
+  @HiveField(6)
+  List<String> members;
 
   ShopList(
       {required this.name,
@@ -25,7 +27,8 @@ class ShopList {
       required this.recipesIngredients,
       required this.otherIngredients,
       required this.id,
-      required this.shared});
+      required this.shared,
+      required this.members});
 
   Map<String, dynamic> toMap() {
     return {
@@ -56,6 +59,7 @@ class ShopList {
         recipesIngredients: recipesIngredients,
         otherIngredients: otherIngredients,
         id: map["id"],
-        shared: map["shared"]);
+        shared: map["shared"],
+        members: map["members"]);
   }
 }

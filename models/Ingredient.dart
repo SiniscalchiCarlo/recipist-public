@@ -10,7 +10,13 @@ class Ingredient {
   String quantity;
   @HiveField(2)
   String unit;
-  Ingredient({required this.name, required this.quantity, required this.unit});
+  @HiveField(3)
+  bool? checked;
+  Ingredient(
+      {required this.name,
+      required this.quantity,
+      required this.unit,
+      this.checked});
 
   Map<String, dynamic> toMap() {
     return {
