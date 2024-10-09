@@ -73,6 +73,7 @@ class _EditShopListState extends State<EditShopList> {
     super.dispose();
   }
 
+  //reassigns the recipes to the shopping list, this way if the recipes are modified will be modifiend in the shopping list too (if you press the restore proportions button)
   void refreshRecipes() {
     for (var i = 0; i < newList.recipes.length; i++) {
       int recipeIndex =
@@ -330,6 +331,14 @@ class _EditShopListState extends State<EditShopList> {
                   }),
             ),
 
+            //REFRESH BUTTON
+
+            MyButton(
+                child: MyText(
+                  text: "Restore proportions",
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                onPressed: getListIngredients),
             //INGREDIENTS
             Expanded(
                 child: ListView.builder(
