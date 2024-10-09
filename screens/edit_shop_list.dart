@@ -220,9 +220,16 @@ class _EditShopListState extends State<EditShopList> {
   }
 
   void addOtherIngredient() {
+    print("AAAAADDDDDDD");
     setState(() {
       newList.otherIngredients
           .add(Ingredient(name: "", quantity: "0", unit: "unit"));
+    });
+  }
+
+  void deleteOtherIngredient(index) {
+    setState(() {
+      newList.otherIngredients.removeAt(index);
     });
   }
 
@@ -322,10 +329,13 @@ class _EditShopListState extends State<EditShopList> {
                     }
                   }),
             ),
+
+            //INGREDIENTS
             Expanded(
                 child: ListView.builder(
-                    itemCount: newList.recipesIngredients.length,
+                    itemCount: newList.recipesIngredients.length + 1,
                     itemBuilder: (context, index) {
+                      //RECIPE INGREDIENTS
                       if (index < newList.recipesIngredients.length) {
                         return Recipeingredient(
                           check: true,
@@ -335,18 +345,40 @@ class _EditShopListState extends State<EditShopList> {
                           index: index,
                         );
                       } else {
-                        return Column(children: [
-                          //ADD NEW INGREDIENT BUTTON
-                          SizedBox(
-                            height: 20,
-                          ),
-                          MyButton(
-                              child: MyText(
-                                text: "+ Add Ingredient",
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                              onPressed: addOtherIngredient)
-                        ]);
+                        return ListView.builder(
+                            shrinkWrap:
+                                true, // This ensures the inner ListView takes only the space it needs
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: newList.otherIngredients.length + 1,
+                            itemBuilder: (context, index) {
+                              //OTHER INGREDIENTS
+                              if (index < newList.otherIngredients.length) {
+                                return Recipeingredient(
+                                  check: true,
+                                  ingredient: newList.otherIngredients[index],
+                                  onChange: onChange,
+                                  deleteIngredient: deleteOtherIngredient,
+                                  index: index,
+                                );
+                              } else {
+                                return Column(
+                                  children: [
+                                    //ADD NEW INGREDIENT BUTTON
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    MyButton(
+                                        child: MyText(
+                                          text: "+ Add Ingredient",
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                        ),
+                                        onPressed: addOtherIngredient)
+                                  ],
+                                );
+                              }
+                            });
                       }
                     })),
             SizedBox(
