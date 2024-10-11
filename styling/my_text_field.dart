@@ -32,20 +32,23 @@ class MyTextField extends StatelessWidget {
         maxWidth: maxWidth ??
             (maxLength * (size ?? 18) * 0.6), // Set the maximum width here
       ),
-      child: TextField(
-        onChanged: onChanged,
-        maxLength: maxLength,
-        controller: controller,
-        style: GoogleFonts.outfit(
-          fontSize: size ?? 16,
-          color: Theme.of(context).colorScheme.inversePrimary,
+      child: Container(
+        height: 40,
+        child: TextField(
+          onChanged: onChanged,
+          maxLength: maxLength,
+          controller: controller,
+          style: GoogleFonts.outfit(
+            fontSize: size ?? 16,
+            color: Theme.of(context).colorScheme.inversePrimary,
+          ),
+          decoration: InputDecoration(
+              counterText: "",
+              border: InputBorder.none,
+              hintText: hintText,
+              contentPadding: EdgeInsets.only(bottom: 10),
+              hintStyle: TextStyle(color: Colors.grey.shade400)),
         ),
-        decoration: InputDecoration(
-            counterText: "",
-            border: InputBorder.none,
-            hintText: hintText,
-            contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-            hintStyle: TextStyle(color: Colors.grey.shade400)),
       ),
     );
   }

@@ -20,18 +20,23 @@ class _MyCheckBokState extends State<MyCheckBok> {
 
   @override
   Widget build(BuildContext context) {
-    return Checkbox(
-      value: isChecked,
-      activeColor: Theme.of(context).colorScheme.inversePrimary,
-      checkColor: Theme.of(context).colorScheme.primary,
-      onChanged: (bool? value) {
-        setState(() {
-          isChecked = value;
-        });
-        if (widget.onChanged != null) {
-          widget.onChanged!(value); // Pass the new value to the parent
-        }
-      },
+    return Container(
+      margin: EdgeInsets.only(left: 4, right: 8),
+      height: 20,
+      width: 20,
+      child: Checkbox(
+        value: isChecked,
+        activeColor: Theme.of(context).colorScheme.inversePrimary,
+        checkColor: Theme.of(context).colorScheme.primary,
+        onChanged: (bool? value) {
+          setState(() {
+            isChecked = value;
+          });
+          if (widget.onChanged != null) {
+            widget.onChanged!(value); // Pass the new value to the parent
+          }
+        },
+      ),
     );
   }
 }
