@@ -30,23 +30,26 @@ class MyNumberField extends StatelessWidget {
           borderRadius: BorderRadius.circular(10)),
       constraints: BoxConstraints(
         maxWidth: maxWidth ??
-            (maxLength * (size ?? 18) * 0.6), // Set the maximum width here
+            (maxLength * (size ?? 18) * 0.8), // Set the maximum width here
       ),
-      child: TextField(
-        onChanged: onChanged,
-        maxLength: maxLength,
-        keyboardType: TextInputType.numberWithOptions(decimal: true),
-        controller: controller,
-        style: GoogleFonts.outfit(
-          fontSize: size ?? 16,
-          color: Theme.of(context).colorScheme.inversePrimary,
+      child: Container(
+        height: 30,
+        child: TextField(
+          onChanged: onChanged,
+          maxLength: maxLength,
+          keyboardType: TextInputType.numberWithOptions(decimal: true),
+          controller: controller,
+          style: GoogleFonts.outfit(
+            fontSize: size ?? 16,
+            color: Theme.of(context).colorScheme.inversePrimary,
+          ),
+          decoration: InputDecoration(
+              counterText: "",
+              border: InputBorder.none,
+              hintText: hintText,
+              contentPadding: EdgeInsets.only(bottom: 15),
+              hintStyle: TextStyle(color: Colors.grey.shade400)),
         ),
-        decoration: InputDecoration(
-            counterText: "",
-            border: InputBorder.none,
-            hintText: hintText,
-            contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-            hintStyle: TextStyle(color: Colors.grey.shade400)),
       ),
     );
   }

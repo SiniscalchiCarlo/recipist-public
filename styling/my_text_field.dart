@@ -33,7 +33,7 @@ class MyTextField extends StatelessWidget {
             (maxLength * (size ?? 18) * 0.6), // Set the maximum width here
       ),
       child: Container(
-        height: 40,
+        height: 30,
         child: TextField(
           onChanged: onChanged,
           maxLength: maxLength,

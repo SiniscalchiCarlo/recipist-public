@@ -77,11 +77,7 @@ class _RecipeingredientState extends State<Recipeingredient> {
                     });
                   },
                 )
-              : Icon(
-                  Icons.circle,
-                  size: 12,
-                ),
-          SizedBox(width: 5),
+              : SizedBox.shrink(),
           //INGREDIENT NAME
           MyTextField(
               controller: _nameController,
@@ -93,7 +89,7 @@ class _RecipeingredientState extends State<Recipeingredient> {
                   _nameController.text,
                   _quantityController.text,
                   _unitController.text)),
-          SizedBox(width: 15),
+          SizedBox(width: 5),
           //INGREDIENT QUANTIY
           MyNumberField(
             controller: _quantityController,
@@ -104,7 +100,7 @@ class _RecipeingredientState extends State<Recipeingredient> {
                 _quantityController.text,
                 _unitController.text),
           ),
-          SizedBox(width: 10),
+          SizedBox(width: 5),
           //INGREDIENT UNIT
           MyDropDown(
             items: ['unit', 'g', 'kg', 'ml', 'l'],

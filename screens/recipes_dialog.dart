@@ -16,6 +16,7 @@ class RecipesDialog extends StatefulWidget {
 
 class _RecipesDialogState extends State<RecipesDialog> {
   late List<ListRecipe> selectedRecipes;
+  List<int> selectedIndexes = [];
   List<Recipe> recipes =
       Hive.box<Recipe>("recipes").values.cast<Recipe>().toList();
 
@@ -30,13 +31,19 @@ class _RecipesDialogState extends State<RecipesDialog> {
   }
 
   void checkRecipe(index) {
+    print("INDEX $index");
+
     ListRecipe lr = ListRecipe(recipe: recipes[index], nperson: 1);
-    if (selectedRecipes.contains(lr)) {
+    if (selectedIndexes.contains(index)) {
       setState(() {
+        selectedIndexes.remove(index);
         selectedRecipes.remove(lr);
+        print("REMOVE RECIPE $lr");
       });
     } else {
       setState(() {
+        print("ADD RECIPE $lr");
+        selectedIndexes.add(index);
         selectedRecipes.add(lr);
       });
     }
@@ -64,7 +71,7 @@ class _RecipesDialogState extends State<RecipesDialog> {
                   MyCheckBok(
                       initialValue:
                           names.contains(recipes[index].name) ? true : false,
-                      onChanged: () => checkRecipe(index)),
+                      onChanged: (value) => checkRecipe(index)),
                   MyText(text: recipes[index].name)
                 ],
               );

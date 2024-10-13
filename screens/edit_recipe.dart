@@ -90,6 +90,7 @@ class _EditRecipeState extends State<EditRecipe> {
 
   @override
   Widget build(BuildContext context) {
+    final ScrollController _ingredietsScrollController = ScrollController();
     Future PickImageFromCamera() async {
       final returnedImage =
           await ImagePicker().pickImage(source: ImageSource.camera);
@@ -174,73 +175,106 @@ class _EditRecipeState extends State<EditRecipe> {
             ],
           ),
           // RECIPE INGREDIENTS
-          Expanded(
-              child: ListView.builder(
-                  itemCount: newRecipe.ingredients.length + 1,
-                  itemBuilder: (context, index) {
-                    if (index < newRecipe.ingredients.length) {
-                      return Recipeingredient(
-                          ingredient: newRecipe.ingredients[index],
-                          index: index,
-                          onChange: onChange,
-                          check: false,
-                          deleteIngredient: deleteIngredient);
-                    } else {
-                      return Column(
-                        children: [
-                          //ADD NEW INGREDIENT BUTTON
-                          SizedBox(
-                            height: 20,
-                          ),
-                          MyButton(
-                              child: MyText(
-                                text: "+ Add Ingredient",
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                              onPressed: addIngredient),
-                          SizedBox(
-                            height: 30,
-                          ),
-                          MyText(text: "Notes", size: 25),
-                          Container(
-                            height: 150,
-                            margin: EdgeInsets.all(10),
-                            child: TextField(
-                                controller: _notesController,
-                                maxLines: 15, //or null
-                                keyboardType: TextInputType.multiline,
-                                decoration: const InputDecoration(
-                                    contentPadding: EdgeInsets.all(10.0),
-                                    hintText: "Recipe Steps...",
-                                    border: OutlineInputBorder())),
-                          ),
+          Container(
+              height: 140,
+              margin: EdgeInsets.symmetric(vertical: 3, horizontal: 10),
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey.shade500),
+                  borderRadius: BorderRadius.circular(10)),
+              child: Scrollbar(
+                thumbVisibility: true,
+                controller: _ingredietsScrollController,
+                child: ListView.builder(
+                    controller: _ingredietsScrollController,
+                    padding: EdgeInsets.zero,
+                    itemCount: newRecipe.ingredients.length,
+                    itemBuilder: (context, index) {
+                      return Column(children: [
+                        index == 0
+                            ? Row(
+                                children: [
+                                  SizedBox(
+                                    width: 15,
+                                  ),
+                                  MyText(
+                                    text: "Name of ingredient",
+                                    color: Colors.grey,
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  MyText(
+                                    text: "Quantity",
+                                    color: Colors.grey,
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                ],
+                              )
+                            : SizedBox.shrink(),
+                        Recipeingredient(
+                            ingredient: newRecipe.ingredients[index],
+                            index: index,
+                            onChange: onChange,
+                            check: false,
+                            deleteIngredient: deleteIngredient)
+                      ]);
+                    }),
+              )),
+          Column(
+            children: [
+              //ADD NEW INGREDIENT BUTTON
+              SizedBox(
+                height: 5,
+              ),
+              MyButton(
+                  child: MyText(
+                    text: "+ Add Ingredient",
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  onPressed: addIngredient),
+              SizedBox(
+                height: 20,
+              ),
+              MyText(text: "Notes", size: 25),
+              Container(
+                height: 150,
+                margin:
+                    EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 15),
+                child: TextField(
+                    controller: _notesController,
+                    maxLines: 15, //or null
+                    keyboardType: TextInputType.multiline,
+                    decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.all(10.0),
+                        hintText: "Recipe Steps...",
+                        border: OutlineInputBorder())),
+              ),
 
-                          //SAVE DELETE BUTTON
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              MyButton(
-                                  child: MyText(
-                                    text: "Delete",
-                                    color: Colors.red,
-                                  ),
-                                  onPressed: deleteRecipe),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              MyButton(
-                                  child: MyText(
-                                    text: "Save",
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                  ),
-                                  onPressed: saveRecipe),
-                            ],
-                          )
-                        ],
-                      );
-                    }
-                  })),
+              //SAVE DELETE BUTTON
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  MyButton(
+                      child: MyText(
+                        text: "Delete",
+                        color: Colors.red,
+                      ),
+                      onPressed: deleteRecipe),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  MyButton(
+                      child: MyText(
+                        text: "Save",
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      onPressed: saveRecipe),
+                ],
+              )
+            ],
+          )
         ]));
   }
 }
