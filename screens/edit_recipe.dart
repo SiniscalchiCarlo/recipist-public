@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_shopping_list/screens/confirm_delete_dialog.dart';
 import 'package:smart_shopping_list/styling/my_counter.dart';
 import 'package:smart_shopping_list/components/recipeIngredient.dart';
 import 'package:smart_shopping_list/models/Ingredient.dart';
@@ -73,6 +74,15 @@ class _EditRecipeState extends State<EditRecipe> {
   void deleteRecipe() {
     final result = "delete";
     Navigator.pop(context, result);
+  }
+
+  void showConfirmDeleteDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return ConfirmDeleteDialog(onDelete: deleteRecipe);
+      },
+    );
   }
 
   void deleteIngredient(index) {
@@ -261,7 +271,7 @@ class _EditRecipeState extends State<EditRecipe> {
                         text: "Delete",
                         color: Colors.red,
                       ),
-                      onPressed: deleteRecipe),
+                      onPressed: showConfirmDeleteDialog),
                   SizedBox(
                     width: 5,
                   ),

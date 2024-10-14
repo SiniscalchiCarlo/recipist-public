@@ -73,7 +73,7 @@ class _ListPageState extends State<ListPage> {
         shopLists[index] = result;
       });
     }
-
+    printWarning("RESULT $result");
     if (result == "delete") {
       printWarning("INDEX $index ${shopLists.length}");
       shopListBox.delete(shopLists[index].id);

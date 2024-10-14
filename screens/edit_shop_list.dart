@@ -6,6 +6,7 @@ import 'package:smart_shopping_list/components/recipeIngredient.dart';
 import 'package:smart_shopping_list/models/Ingredient.dart';
 import 'package:smart_shopping_list/models/Recipe.dart';
 import 'package:smart_shopping_list/models/ShopList.dart';
+import 'package:smart_shopping_list/screens/confirm_delete_dialog.dart';
 import 'package:smart_shopping_list/screens/recipes_dialog.dart';
 import 'package:smart_shopping_list/services/firestore.dart';
 import 'package:smart_shopping_list/styling/my_button.dart';
@@ -101,8 +102,17 @@ class _EditShopListState extends State<EditShopList> {
         await FirestoreService().deleteListFromDb(newList.id);
       }
     }
-
+    print("DELETE LIST");
     Navigator.pop(context, result);
+  }
+
+  void showConfirmDeleteDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return ConfirmDeleteDialog(onDelete: deleteList);
+      },
+    );
   }
 
   void deleteRecipe(int index) {
@@ -221,7 +231,6 @@ class _EditShopListState extends State<EditShopList> {
   }
 
   void addOtherIngredient() {
-    print("AAAAADDDDDDD");
     setState(() {
       newList.otherIngredients
           .add(Ingredient(name: "", quantity: "0", unit: "unit"));
@@ -319,7 +328,7 @@ class _EditShopListState extends State<EditShopList> {
                             ),
                             SizedBox(width: 20),
                             IconButton(
-                              onPressed: () => deleteRecipe(index),
+                              onPressed: () => showConfirmDeleteDialog(),
                               icon: Container(
                                   padding: EdgeInsets.all(5),
                                   decoration: BoxDecoration(
@@ -472,7 +481,7 @@ class _EditShopListState extends State<EditShopList> {
                       text: "Delete",
                       color: Colors.red,
                     ),
-                    onPressed: deleteList),
+                    onPressed: showConfirmDeleteDialog),
                 SizedBox(
                   width: 5,
                 ),
