@@ -156,7 +156,7 @@ class _EditRecipeState extends State<EditRecipe> {
               )
             ]),
           ),
-
+          SizedBox(height: 20),
           //NUMBER OF PERSONS
           Row(
             mainAxisAlignment: MainAxisAlignment.center,

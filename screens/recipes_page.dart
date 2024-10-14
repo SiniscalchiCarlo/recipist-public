@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:smart_shopping_list/components/user_app_bar.dart';
 import 'package:smart_shopping_list/models/Ingredient.dart';
 import 'package:smart_shopping_list/models/Recipe.dart';
 import 'package:smart_shopping_list/styling/my_action_button.dart';
@@ -89,7 +88,15 @@ class _RecipesPageState extends State<RecipesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: UserAppBar()),
+      appBar: AppBar(
+        title: Container(
+          alignment: Alignment.center,
+          child: const MyText(
+            text: "Recipes",
+            size: 40,
+          ),
+        ),
+      ),
       backgroundColor: Theme.of(context).colorScheme.surface,
       floatingActionButton: MyActionButton(
         onPressed: addRecipe,
@@ -97,10 +104,6 @@ class _RecipesPageState extends State<RecipesPage> {
       ),
       body: Column(
         children: [
-          MyText(
-            text: "My recipes:",
-            size: 25,
-          ),
           Expanded(
             child: ListView.builder(
                 itemCount: recipes.length,

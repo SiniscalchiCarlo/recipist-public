@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_shopping_list/screens/auth/auth_page.dart';
-import 'package:smart_shopping_list/screens/auth/login_page.dart';
 import 'package:smart_shopping_list/screens/auth/profile_info.dart';
 import 'package:smart_shopping_list/styling/my_text.dart';
 

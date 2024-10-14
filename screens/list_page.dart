@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:smart_shopping_list/components/user_app_bar.dart';
 import 'package:smart_shopping_list/models/ShopList.dart';
 import 'package:smart_shopping_list/screens/edit_recipe.dart';
 import 'package:smart_shopping_list/screens/edit_shop_list.dart';
@@ -88,7 +87,15 @@ class _ListPageState extends State<ListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: UserAppBar()),
+      appBar: AppBar(
+        title: Container(
+          alignment: Alignment.center,
+          child: const MyText(
+            text: "Shopping lists",
+            size: 40,
+          ),
+        ),
+      ),
       backgroundColor: Theme.of(context).colorScheme.surface,
       floatingActionButton: MyActionButton(
         onPressed: addShopList,
@@ -96,10 +103,6 @@ class _ListPageState extends State<ListPage> {
       ),
       body: Column(
         children: [
-          MyText(
-            text: "My shopping lists:",
-            size: 25,
-          ),
           Expanded(
             child: ListView.builder(
                 itemCount: shopLists.length,

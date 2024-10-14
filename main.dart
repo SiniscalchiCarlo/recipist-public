@@ -11,8 +11,6 @@ import 'package:smart_shopping_list/screens/auth/auth_page.dart';
 import 'package:smart_shopping_list/screens/edit_recipe.dart';
 import 'package:smart_shopping_list/screens/edit_shop_list.dart';
 import 'package:smart_shopping_list/screens/home_page.dart';
-import 'package:smart_shopping_list/screens/auth/login_page.dart';
-import 'package:smart_shopping_list/screens/recipes_page.dart';
 import 'package:smart_shopping_list/services/firestore.dart';
 import 'package:smart_shopping_list/theme/theme_provider.dart';
 import 'package:uni_links/uni_links.dart';
@@ -100,12 +98,10 @@ class _MyAppState extends State<MyApp> {
           future: FirestoreService().getListFromDb(_listId ?? ""),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              // While the future is resolving, show the loading GIF
               return Container(
-                color: Colors.white, // Set the background color to white
+                color: Colors.white,
                 child: Center(
-                  child: Image.asset(
-                      'assets/cooking_loading.gif'), // Load your GIF here
+                  child: Image.asset('assets/cooking_loading.gif'),
                 ),
               );
             } else if (snapshot.hasError) {
