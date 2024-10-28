@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:smart_shopping_list/models/ShopList.dart';
 import 'package:smart_shopping_list/screens/edit_recipe.dart';
-import 'package:smart_shopping_list/screens/edit_shop_list.dart';
+import 'package:smart_shopping_list/screens/shop%20list/edit_shop_list.dart';
+import 'package:smart_shopping_list/screens/shop%20list/name_screen.dart';
 import 'package:smart_shopping_list/styling/my_action_button.dart';
 import 'package:smart_shopping_list/styling/my_card.dart';
 import 'package:smart_shopping_list/styling/my_text.dart';
@@ -38,18 +39,10 @@ class _ListPageState extends State<ListPage> {
     String newId = Uuid().v4().substring(0, 8);
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => EditShopList(
-            shopList: ShopList(
-                name: "",
-                recipes: [],
-                recipesIngredients: [],
-                otherIngredients: [],
-                id: newId,
-                shared: false,
-                members: [])),
-      ),
+      MaterialPageRoute(builder: (context) => NameScreen(newId: newId)),
     );
+
+    printWarning(result.name);
     if (result != null && result != "delete") {
       result.id = newId;
       shopListBox.put(newId, result);

@@ -11,6 +11,7 @@ import 'package:smart_shopping_list/styling/my_text.dart';
 import 'package:smart_shopping_list/styling/my_text_field.dart';
 import 'package:smart_shopping_list/models/Recipe.dart';
 import 'package:flutter/services.dart';
+import 'package:smart_shopping_list/styling/my_title.dart';
 
 void printWarning(String text) {
   print('\x1B[33m$text\x1B[0m');
@@ -61,6 +62,8 @@ class _EditRecipeState extends State<EditRecipe> {
   }
 
   void saveRecipe() {
+    //removes ingredients wihout a name
+    newRecipe.ingredients.removeWhere((obj) => obj.name.isEmpty);
     final result = Recipe(
         name: _nameController.text,
         notes: _notesController.text,
@@ -113,19 +116,23 @@ class _EditRecipeState extends State<EditRecipe> {
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.surface,
         body: Column(children: [
+          SizedBox(
+            height: 50,
+          ),
           //RECIPE TITLE AND IMAGE
           Center(
-            child: Column(children: [
+            child: Row(children: [
               SizedBox(
-                height: 50,
+                width: 10,
               ),
+
               //RECIPE PHOTO
               OutlinedButton(
                   style: OutlinedButton.styleFrom(
                     shape: CircleBorder(),
                     padding: selectedImage != null
                         ? EdgeInsets.all(0)
-                        : EdgeInsets.all(30),
+                        : EdgeInsets.all(20),
                     backgroundColor: Colors.white,
 
                     side: BorderSide(
@@ -141,7 +148,7 @@ class _EditRecipeState extends State<EditRecipe> {
                   child: selectedImage != null
                       ? ClipOval(
                           child: SizedBox.fromSize(
-                            size: Size.fromRadius(50),
+                            size: Size.fromRadius(30),
                             child: Image.file(
                               selectedImage!,
                               fit: BoxFit.cover,
@@ -154,24 +161,30 @@ class _EditRecipeState extends State<EditRecipe> {
                           size: 30.0,
                         )),
               SizedBox(
-                height: 10,
+                width: 10,
               ),
 
               //RECIPE TITLE
-              MyTextField(
+              MyTitle(
                 controller: _nameController,
+                size: 25,
                 maxLength: 25,
                 maxWidth: 200,
                 hintText: "Recipe Name...",
               )
             ]),
           ),
-          SizedBox(height: 20),
+          SizedBox(
+            height: 20,
+          ),
           //NUMBER OF PERSONS
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              MyText(text: "Ingredients for:", size: 20),
+              SizedBox(
+                width: 10,
+              ),
+              MyText(text: "Serves:", size: 20),
               SizedBox(
                 width: 20,
               ),
@@ -186,7 +199,7 @@ class _EditRecipeState extends State<EditRecipe> {
           ),
           // RECIPE INGREDIENTS
           Container(
-              height: 140,
+              height: 250,
               margin: EdgeInsets.symmetric(vertical: 3, horizontal: 10),
               decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey.shade500),
@@ -206,17 +219,17 @@ class _EditRecipeState extends State<EditRecipe> {
                                   SizedBox(
                                     width: 15,
                                   ),
-                                  MyText(
-                                    text: "Name of ingredient",
-                                    color: Colors.grey,
-                                  ),
+                                  // MyText(
+                                  //   text: "Name of ingredient",
+                                  //   color: Colors.grey,
+                                  // ),
                                   SizedBox(
                                     width: 20,
                                   ),
-                                  MyText(
-                                    text: "Quantity",
-                                    color: Colors.grey,
-                                  ),
+                                  // MyText(
+                                  //   text: "Quantity",
+                                  //   color: Colors.grey,
+                                  // ),
                                   SizedBox(
                                     width: 20,
                                   ),
@@ -245,21 +258,33 @@ class _EditRecipeState extends State<EditRecipe> {
                   ),
                   onPressed: addIngredient),
               SizedBox(
-                height: 20,
+                height: 10,
               ),
-              MyText(text: "Notes", size: 25),
+
+              Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                SizedBox(
+                  width: 10,
+                ),
+                MyText(text: "Notes", size: 20)
+              ]),
               Container(
                 height: 150,
                 margin:
                     EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 15),
+                padding: EdgeInsets.only(left: 10, right: 10),
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey.shade500),
+                    borderRadius: BorderRadius.circular(10)),
                 child: TextField(
                     controller: _notesController,
                     maxLines: 15, //or null
                     keyboardType: TextInputType.multiline,
-                    decoration: const InputDecoration(
-                        contentPadding: EdgeInsets.all(10.0),
+                    decoration: InputDecoration(
+                        counterText: "",
+                        border: InputBorder.none,
                         hintText: "Recipe Steps...",
-                        border: OutlineInputBorder())),
+                        contentPadding: EdgeInsets.only(bottom: 10),
+                        hintStyle: TextStyle(color: Colors.grey.shade400))),
               ),
 
               //SAVE DELETE BUTTON
@@ -267,13 +292,14 @@ class _EditRecipeState extends State<EditRecipe> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   MyButton(
+                      color: Colors.red,
                       child: MyText(
                         text: "Delete",
-                        color: Colors.red,
+                        color: Colors.grey.shade200,
                       ),
                       onPressed: showConfirmDeleteDialog),
                   SizedBox(
-                    width: 5,
+                    width: 15,
                   ),
                   MyButton(
                       child: MyText(

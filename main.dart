@@ -9,7 +9,7 @@ import 'package:smart_shopping_list/models/Recipe.dart';
 import 'package:smart_shopping_list/models/ShopList.dart';
 import 'package:smart_shopping_list/screens/auth/auth_page.dart';
 import 'package:smart_shopping_list/screens/edit_recipe.dart';
-import 'package:smart_shopping_list/screens/edit_shop_list.dart';
+import 'package:smart_shopping_list/screens/shop%20list/edit_shop_list.dart';
 import 'package:smart_shopping_list/screens/home_page.dart';
 import 'package:smart_shopping_list/services/firestore.dart';
 import 'package:smart_shopping_list/theme/theme_provider.dart';

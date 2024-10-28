@@ -65,7 +65,7 @@ class _RecipeingredientState extends State<Recipeingredient> {
     return Container(
       margin: EdgeInsets.only(top: 0, left: 5, right: 0, bottom: 0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           widget.check
               ? MyCheckBok(
@@ -119,12 +119,13 @@ class _RecipeingredientState extends State<Recipeingredient> {
             onTap: () => widget.deleteIngredient(widget.index),
             child: Container(
                 padding: EdgeInsets.all(5),
+                margin: EdgeInsets.only(right: 7),
                 decoration: BoxDecoration(
-                    color: Colors.orange.shade100,
+                    color: Colors.grey.shade200,
                     borderRadius: BorderRadius.circular(10)),
                 child: Icon(
                   Icons.delete,
-                  color: Colors.orange,
+                  color: Colors.grey.shade400,
                 )),
           )
         ],

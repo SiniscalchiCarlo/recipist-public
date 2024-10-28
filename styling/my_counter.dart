@@ -27,24 +27,32 @@ class _MyCounterState extends State<MyCounter> {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        IconButton(
-            onPressed: () {
-              numberPersons -= 1;
-              widget.onPressed(numberPersons);
-            },
-            icon: Icon(Icons.keyboard_arrow_left,
-                size: widget.size != null ? (widget.size! + 10) : 30)),
+        SizedBox(
+          height: 30,
+          width: 30,
+          child: IconButton(
+              onPressed: () {
+                numberPersons -= 1;
+                widget.onPressed(numberPersons);
+              },
+              icon: Icon(Icons.remove,
+                  size: widget.size != null ? (widget.size! - 5) : 10)),
+        ),
         MyText(
           text: "$numberPersons",
           size: (widget.size) ?? 18,
         ),
-        IconButton(
-            onPressed: () {
-              numberPersons += 1;
-              widget.onPressed(numberPersons);
-            },
-            icon: Icon(Icons.keyboard_arrow_right,
-                size: widget.size != null ? (widget.size! + 10) : 30)),
+        SizedBox(
+          height: 35,
+          width: 35,
+          child: IconButton(
+              onPressed: () {
+                numberPersons += 1;
+                widget.onPressed(numberPersons);
+              },
+              icon: Icon(Icons.add,
+                  size: widget.size != null ? (widget.size!) : 15)),
+        ),
       ],
     );
   }
