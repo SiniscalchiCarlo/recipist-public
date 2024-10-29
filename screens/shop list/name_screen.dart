@@ -45,7 +45,7 @@ class NameScreen extends StatelessWidget {
               onPressed: () async {
                 String name = _nameController.text.trim();
                 if (name.isNotEmpty) {
-                  ShopList result = await Navigator.push(
+                  final result = await Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
@@ -53,7 +53,6 @@ class NameScreen extends StatelessWidget {
                     ),
                   );
                   Navigator.pop(context, result);
-                  printWarning(result.name);
                 }
               },
             ),

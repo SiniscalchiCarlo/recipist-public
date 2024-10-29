@@ -42,7 +42,6 @@ class _ListPageState extends State<ListPage> {
       MaterialPageRoute(builder: (context) => NameScreen(newId: newId)),
     );
 
-    printWarning(result.name);
     if (result != null && result != "delete") {
       result.id = newId;
       shopListBox.put(newId, result);

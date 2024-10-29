@@ -95,7 +95,7 @@ class _OtherIngredientsState extends State<OtherIngredients> {
               color: Theme.of(context).colorScheme.primary,
             ),
             onPressed: () async {
-              ShopList result = await Navigator.push(
+              final result = await Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) =>

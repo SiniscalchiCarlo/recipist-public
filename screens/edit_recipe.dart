@@ -115,202 +115,204 @@ class _EditRecipeState extends State<EditRecipe> {
 
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.surface,
-        body: Column(children: [
-          SizedBox(
-            height: 50,
-          ),
-          //RECIPE TITLE AND IMAGE
-          Center(
-            child: Row(children: [
-              SizedBox(
-                width: 10,
-              ),
-
-              //RECIPE PHOTO
-              OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    shape: CircleBorder(),
-                    padding: selectedImage != null
-                        ? EdgeInsets.all(0)
-                        : EdgeInsets.all(20),
-                    backgroundColor: Colors.white,
-
-                    side: BorderSide(
-                      color: Colors.amber, // Border color
-                      width: 1, // Border width
-                    ),
-                    elevation: 7, // Shadow effect
-                    shadowColor: Colors.orange.withOpacity(0.5),
-                  ),
-                  onPressed: () {
-                    PickImageFromCamera();
-                  },
-                  child: selectedImage != null
-                      ? ClipOval(
-                          child: SizedBox.fromSize(
-                            size: Size.fromRadius(30),
-                            child: Image.file(
-                              selectedImage!,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        )
-                      : Icon(
-                          Icons.add_a_photo_rounded,
-                          color: Colors.grey,
-                          size: 30.0,
-                        )),
-              SizedBox(
-                width: 10,
-              ),
-
-              //RECIPE TITLE
-              MyTitle(
-                controller: _nameController,
-                size: 25,
-                maxLength: 25,
-                maxWidth: 200,
-                hintText: "Recipe Name...",
-              )
-            ]),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          //NUMBER OF PERSONS
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              SizedBox(
-                width: 10,
-              ),
-              MyText(text: "Serves:", size: 20),
-              SizedBox(
-                width: 20,
-              ),
-              MyCounter(
-                size: 20,
-                onPressed: (value) => setState(() {
-                  newRecipe.nperson = value;
-                }),
-                startValue: newRecipe.nperson,
-              )
-            ],
-          ),
-          // RECIPE INGREDIENTS
-          Container(
-              height: 250,
-              margin: EdgeInsets.symmetric(vertical: 3, horizontal: 10),
-              decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey.shade500),
-                  borderRadius: BorderRadius.circular(10)),
-              child: Scrollbar(
-                thumbVisibility: true,
-                controller: _ingredietsScrollController,
-                child: ListView.builder(
-                    controller: _ingredietsScrollController,
-                    padding: EdgeInsets.zero,
-                    itemCount: newRecipe.ingredients.length,
-                    itemBuilder: (context, index) {
-                      return Column(children: [
-                        index == 0
-                            ? Row(
-                                children: [
-                                  SizedBox(
-                                    width: 15,
-                                  ),
-                                  // MyText(
-                                  //   text: "Name of ingredient",
-                                  //   color: Colors.grey,
-                                  // ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  // MyText(
-                                  //   text: "Quantity",
-                                  //   color: Colors.grey,
-                                  // ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                ],
-                              )
-                            : SizedBox.shrink(),
-                        Recipeingredient(
-                            ingredient: newRecipe.ingredients[index],
-                            index: index,
-                            onChange: onChange,
-                            check: false,
-                            deleteIngredient: deleteIngredient)
-                      ]);
-                    }),
-              )),
-          Column(
-            children: [
-              //ADD NEW INGREDIENT BUTTON
-              SizedBox(
-                height: 5,
-              ),
-              MyButton(
-                  child: MyText(
-                    text: "+ Add Ingredient",
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  onPressed: addIngredient),
-              SizedBox(
-                height: 10,
-              ),
-
-              Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+        body: SingleChildScrollView(
+          child: Column(children: [
+            SizedBox(
+              height: 50,
+            ),
+            //RECIPE TITLE AND IMAGE
+            Center(
+              child: Row(children: [
                 SizedBox(
                   width: 10,
                 ),
-                MyText(text: "Notes", size: 20)
+
+                //RECIPE PHOTO
+                OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      shape: CircleBorder(),
+                      padding: selectedImage != null
+                          ? EdgeInsets.all(0)
+                          : EdgeInsets.all(20),
+                      backgroundColor: Colors.white,
+
+                      side: BorderSide(
+                        color: Colors.amber, // Border color
+                        width: 1, // Border width
+                      ),
+                      elevation: 7, // Shadow effect
+                      shadowColor: Colors.orange.withOpacity(0.5),
+                    ),
+                    onPressed: () {
+                      PickImageFromCamera();
+                    },
+                    child: selectedImage != null
+                        ? ClipOval(
+                            child: SizedBox.fromSize(
+                              size: Size.fromRadius(30),
+                              child: Image.file(
+                                selectedImage!,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          )
+                        : Icon(
+                            Icons.add_a_photo_rounded,
+                            color: Colors.grey,
+                            size: 30.0,
+                          )),
+                SizedBox(
+                  width: 10,
+                ),
+
+                //RECIPE TITLE
+                MyTitle(
+                  controller: _nameController,
+                  size: 25,
+                  maxLength: 25,
+                  maxWidth: 200,
+                  hintText: "Recipe Name...",
+                )
               ]),
-              Container(
-                height: 150,
-                margin:
-                    EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 15),
-                padding: EdgeInsets.only(left: 10, right: 10),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            //NUMBER OF PERSONS
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: 10,
+                ),
+                MyText(text: "Serves:", size: 20),
+                SizedBox(
+                  width: 20,
+                ),
+                MyCounter(
+                  size: 20,
+                  onPressed: (value) => setState(() {
+                    newRecipe.nperson = value;
+                  }),
+                  startValue: newRecipe.nperson,
+                )
+              ],
+            ),
+            // RECIPE INGREDIENTS
+            Container(
+                height: 250,
+                margin: EdgeInsets.symmetric(vertical: 3, horizontal: 10),
                 decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey.shade500),
                     borderRadius: BorderRadius.circular(10)),
-                child: TextField(
-                    controller: _notesController,
-                    maxLines: 15, //or null
-                    keyboardType: TextInputType.multiline,
-                    decoration: InputDecoration(
-                        counterText: "",
-                        border: InputBorder.none,
-                        hintText: "Recipe Steps...",
-                        contentPadding: EdgeInsets.only(bottom: 10),
-                        hintStyle: TextStyle(color: Colors.grey.shade400))),
-              ),
+                child: Scrollbar(
+                  thumbVisibility: true,
+                  controller: _ingredietsScrollController,
+                  child: ListView.builder(
+                      controller: _ingredietsScrollController,
+                      padding: EdgeInsets.zero,
+                      itemCount: newRecipe.ingredients.length,
+                      itemBuilder: (context, index) {
+                        return Column(children: [
+                          index == 0
+                              ? Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 15,
+                                    ),
+                                    // MyText(
+                                    //   text: "Name of ingredient",
+                                    //   color: Colors.grey,
+                                    // ),
+                                    SizedBox(
+                                      width: 20,
+                                    ),
+                                    // MyText(
+                                    //   text: "Quantity",
+                                    //   color: Colors.grey,
+                                    // ),
+                                    SizedBox(
+                                      width: 20,
+                                    ),
+                                  ],
+                                )
+                              : SizedBox.shrink(),
+                          Recipeingredient(
+                              ingredient: newRecipe.ingredients[index],
+                              index: index,
+                              onChange: onChange,
+                              check: false,
+                              deleteIngredient: deleteIngredient)
+                        ]);
+                      }),
+                )),
+            Column(
+              children: [
+                //ADD NEW INGREDIENT BUTTON
+                SizedBox(
+                  height: 5,
+                ),
+                MyButton(
+                    child: MyText(
+                      text: "+ Add Ingredient",
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    onPressed: addIngredient),
+                SizedBox(
+                  height: 10,
+                ),
 
-              //SAVE DELETE BUTTON
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  MyButton(
-                      color: Colors.red,
-                      child: MyText(
-                        text: "Delete",
-                        color: Colors.grey.shade200,
-                      ),
-                      onPressed: showConfirmDeleteDialog),
+                Row(mainAxisAlignment: MainAxisAlignment.start, children: [
                   SizedBox(
-                    width: 15,
+                    width: 10,
                   ),
-                  MyButton(
-                      child: MyText(
-                        text: "Save",
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      onPressed: saveRecipe),
-                ],
-              )
-            ],
-          )
-        ]));
+                  MyText(text: "Notes", size: 20)
+                ]),
+                Container(
+                  height: 150,
+                  margin:
+                      EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 15),
+                  padding: EdgeInsets.only(left: 10, right: 10),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey.shade500),
+                      borderRadius: BorderRadius.circular(10)),
+                  child: TextField(
+                      controller: _notesController,
+                      maxLines: 15, //or null
+                      keyboardType: TextInputType.multiline,
+                      decoration: InputDecoration(
+                          counterText: "",
+                          border: InputBorder.none,
+                          hintText: "Recipe Steps...",
+                          contentPadding: EdgeInsets.only(bottom: 10),
+                          hintStyle: TextStyle(color: Colors.grey.shade400))),
+                ),
+
+                //SAVE DELETE BUTTON
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    MyButton(
+                        color: Colors.red,
+                        child: MyText(
+                          text: "Delete",
+                          color: Colors.grey.shade200,
+                        ),
+                        onPressed: showConfirmDeleteDialog),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    MyButton(
+                        child: MyText(
+                          text: "Save",
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        onPressed: saveRecipe),
+                  ],
+                )
+              ],
+            )
+          ]),
+        ));
   }
 }
