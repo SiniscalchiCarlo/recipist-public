@@ -27,7 +27,7 @@ class _MyCheckBokState extends State<MyCheckBok> {
       child: Checkbox(
         value: isChecked,
         activeColor: Theme.of(context).colorScheme.inversePrimary,
-        checkColor: Theme.of(context).colorScheme.primary,
+        checkColor: Colors.grey.shade200,
         onChanged: (bool? value) {
           setState(() {
             isChecked = value;

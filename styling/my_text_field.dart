@@ -12,6 +12,7 @@ class MyTextField extends StatelessWidget {
   final Function(String)? onChanged;
   final double? maxWidth;
   final String? hintText;
+  final bool? onlyLine;
   const MyTextField(
       {super.key,
       required this.controller,
@@ -19,15 +20,18 @@ class MyTextField extends StatelessWidget {
       this.size,
       this.onChanged,
       this.maxWidth,
-      this.hintText});
+      this.hintText,
+      this.onlyLine});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(left: 4),
-      decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.shade500),
-          borderRadius: BorderRadius.circular(10)),
+      decoration: onlyLine != true
+          ? BoxDecoration(
+              border: Border.all(color: Colors.grey.shade500),
+              borderRadius: BorderRadius.circular(10))
+          : null,
       constraints: BoxConstraints(
         maxWidth: maxWidth ??
             (maxLength * (size ?? 18) * 0.6), // Set the maximum width here
@@ -40,11 +44,12 @@ class MyTextField extends StatelessWidget {
           controller: controller,
           style: GoogleFonts.outfit(
             fontSize: size ?? 16,
-            color: Theme.of(context).colorScheme.inversePrimary,
+            color: Colors.black,
           ),
           decoration: InputDecoration(
               counterText: "",
-              border: InputBorder.none,
+              border:
+                  onlyLine != true ? InputBorder.none : UnderlineInputBorder(),
               hintText: hintText,
               contentPadding: EdgeInsets.only(bottom: 10),
               hintStyle: TextStyle(color: Colors.grey.shade400)),

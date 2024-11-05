@@ -40,7 +40,7 @@ class NameScreen extends StatelessWidget {
             MyButton(
               child: MyText(
                 text: "Next",
-                color: Theme.of(context).colorScheme.primary,
+                color: Colors.grey.shade200,
               ),
               onPressed: () async {
                 String name = _nameController.text.trim();

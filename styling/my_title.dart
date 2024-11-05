@@ -37,7 +37,7 @@ class MyTitle extends StatelessWidget {
           controller: controller,
           style: GoogleFonts.outfit(
             fontSize: size ?? 16,
-            color: Theme.of(context).colorScheme.inversePrimary,
+            color: Colors.black,
           ),
           decoration: InputDecoration(
               counterText: "",

@@ -83,7 +83,7 @@ class _OtherIngredientsState extends State<OtherIngredients> {
           MyButton(
               child: MyText(
                 text: "+ Add Item",
-                color: Theme.of(context).colorScheme.primary,
+                color: Colors.grey.shade200,
               ),
               onPressed: addOtherIngredient),
           SizedBox(
@@ -92,7 +92,7 @@ class _OtherIngredientsState extends State<OtherIngredients> {
           MyButton(
             child: MyText(
               text: "Next",
-              color: Theme.of(context).colorScheme.primary,
+              color: Colors.grey.shade200,
             ),
             onPressed: () async {
               final result = await Navigator.push(

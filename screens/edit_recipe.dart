@@ -255,7 +255,7 @@ class _EditRecipeState extends State<EditRecipe> {
                 MyButton(
                     child: MyText(
                       text: "+ Add Ingredient",
-                      color: Theme.of(context).colorScheme.primary,
+                      color: Colors.grey.shade200,
                     ),
                     onPressed: addIngredient),
                 SizedBox(
@@ -305,7 +305,7 @@ class _EditRecipeState extends State<EditRecipe> {
                     MyButton(
                         child: MyText(
                           text: "Save",
-                          color: Theme.of(context).colorScheme.primary,
+                          color: Colors.grey.shade200,
                         ),
                         onPressed: saveRecipe),
                   ],

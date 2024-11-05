@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:provider/provider.dart';
 import 'package:smart_shopping_list/firebase_options.dart';
 import 'package:smart_shopping_list/models/Ingredient.dart';
 import 'package:smart_shopping_list/models/ListRecipe.dart';
@@ -12,7 +11,6 @@ import 'package:smart_shopping_list/screens/edit_recipe.dart';
 import 'package:smart_shopping_list/screens/shop%20list/edit_shop_list.dart';
 import 'package:smart_shopping_list/screens/home_page.dart';
 import 'package:smart_shopping_list/services/firestore.dart';
-import 'package:smart_shopping_list/theme/theme_provider.dart';
 import 'package:uni_links/uni_links.dart';
 import 'dart:async';
 
@@ -31,10 +29,7 @@ void main() async {
   var box2 = await Hive.openBox<ShopList>('shopLists');
   // await box1.clear();
   // await box2.clear();
-  runApp(ChangeNotifierProvider(
-    create: (context) => ThemeProvider(),
-    child: const MyApp(),
-  ));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -156,7 +151,6 @@ class _MyAppState extends State<MyApp> {
     }
 
     return MaterialApp(
-      theme: Provider.of<ThemeProvider>(context).themeData,
       home: page,
     );
   }

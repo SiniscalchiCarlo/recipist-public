@@ -372,7 +372,7 @@ class _EditShopListState extends State<EditShopList> {
                 child: MyButton(
                     child: MyText(
                       text: "+ Add Recipe",
-                      color: Theme.of(context).colorScheme.primary,
+                      color: Colors.grey.shade200,
                     ),
                     onPressed: addRecipe),
               ),
@@ -511,7 +511,7 @@ class _EditShopListState extends State<EditShopList> {
               MyButton(
                   child: MyText(
                     text: "+ Add Item",
-                    color: Theme.of(context).colorScheme.primary,
+                    color: Colors.grey.shade200,
                   ),
                   onPressed: addOtherIngredient),
 
@@ -534,7 +534,7 @@ class _EditShopListState extends State<EditShopList> {
                   MyButton(
                       child: MyText(
                         text: "Save",
-                        color: Theme.of(context).colorScheme.primary,
+                        color: Colors.grey.shade200,
                       ),
                       onPressed: saveList),
                 ],

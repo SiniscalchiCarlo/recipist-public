@@ -119,7 +119,7 @@ class _RecipesScreenState extends State<RecipesScreen> {
             child: MyButton(
                 child: MyText(
                   text: "+ Add Recipe",
-                  color: Theme.of(context).colorScheme.primary,
+                  color: Colors.grey.shade200,
                 ),
                 onPressed: addRecipe),
           ),
@@ -127,7 +127,7 @@ class _RecipesScreenState extends State<RecipesScreen> {
           MyButton(
             child: MyText(
               text: "Next",
-              color: Theme.of(context).colorScheme.primary,
+              color: Colors.grey.shade200,
             ),
             onPressed: () async {
               final result = await Navigator.push(
