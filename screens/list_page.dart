@@ -88,7 +88,7 @@ class _ListPageState extends State<ListPage> {
           ),
         ),
       ),
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: Colors.white,
       floatingActionButton: MyActionButton(
         onPressed: addShopList,
         text: "+",

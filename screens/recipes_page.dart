@@ -97,7 +97,7 @@ class _RecipesPageState extends State<RecipesPage> {
           ),
         ),
       ),
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: Colors.white,
       floatingActionButton: MyActionButton(
         onPressed: addRecipe,
         text: "+",

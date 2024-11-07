@@ -276,7 +276,7 @@ class _EditShopListState extends State<EditShopList> {
                 )
               ],
             )),
-        backgroundColor: Theme.of(context).colorScheme.surface,
+        backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Column(
             children: [

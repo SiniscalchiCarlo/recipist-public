@@ -114,7 +114,7 @@ class _EditRecipeState extends State<EditRecipe> {
     }
 
     return Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.surface,
+        backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Column(children: [
             SizedBox(

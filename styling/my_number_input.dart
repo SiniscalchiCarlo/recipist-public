@@ -41,7 +41,7 @@ class MyNumberField extends StatelessWidget {
           controller: controller,
           style: GoogleFonts.outfit(
             fontSize: size ?? 16,
-            color: Theme.of(context).colorScheme.inversePrimary,
+            color: Colors.grey.shade400,
           ),
           decoration: InputDecoration(
               counterText: "",
