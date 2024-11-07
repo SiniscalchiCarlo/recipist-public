@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui' as ui;
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_shopping_list/screens/confirm_delete_dialog.dart';
@@ -106,7 +107,7 @@ class _EditRecipeState extends State<EditRecipe> {
     final ScrollController _ingredietsScrollController = ScrollController();
     Future PickImageFromCamera() async {
       final returnedImage =
-          await ImagePicker().pickImage(source: ImageSource.camera);
+          await ImagePicker().pickImage(source: ImageSource.gallery);
       if (returnedImage == null) return;
       setState(() {
         selectedImage = File(returnedImage.path);
@@ -114,6 +115,13 @@ class _EditRecipeState extends State<EditRecipe> {
     }
 
     return Scaffold(
+        appBar: PreferredSize(
+          preferredSize: ui.Size.fromHeight(30.0),
+          child: AppBar(
+            backgroundColor: Colors.transparent,
+            automaticallyImplyLeading: true,
+          ),
+        ),
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Column(children: [

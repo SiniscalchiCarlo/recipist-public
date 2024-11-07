@@ -80,6 +80,7 @@ class _ListPageState extends State<ListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
         title: Container(
           alignment: Alignment.center,
           child: const MyText(
@@ -105,7 +106,11 @@ class _ListPageState extends State<ListPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         SizedBox(width: 10),
-                        MyText(text: shopLists[index].name, size: 20)
+                        MyText(
+                          text: shopLists[index].name,
+                          size: 20,
+                          color: Colors.grey.shade200,
+                        )
                       ],
                     ),
                   );

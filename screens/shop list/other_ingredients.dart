@@ -39,7 +39,11 @@ class _OtherIngredientsState extends State<OtherIngredients> {
   Widget build(BuildContext context) {
     final ScrollController _otherIngredietsScroll = ScrollController();
     return Scaffold(
-      appBar: AppBar(title: SizedBox.shrink()),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: SizedBox.shrink(),
+        backgroundColor: Colors.transparent,
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

@@ -29,6 +29,7 @@ class _HomePageState extends State<HomePage> {
           child: _widgetOptions.elementAt(_selectedIndex),
         ),
         bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: Colors.grey.shade100,
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.receipt_long),

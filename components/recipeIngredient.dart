@@ -82,7 +82,7 @@ class _RecipeingredientState extends State<Recipeingredient> {
           MyTextField(
               controller: _nameController,
               maxLength: 20,
-              maxWidth: 130,
+              maxWidth: 120,
               hintText: "Ingredient",
               onChanged: (value) => widget.onChange(
                   widget.ingredient,
@@ -103,7 +103,7 @@ class _RecipeingredientState extends State<Recipeingredient> {
           SizedBox(width: 5),
           //INGREDIENT UNIT
           MyDropDown(
-            items: ['unit', 'g', 'kg', 'ml', 'l'],
+            items: ['unit', 'g', 'kg', 'ml', 'l', 'tbsp', 'tsp', 'need'],
             selectedValue: selectedUnit,
             onChanged: (newValue) {
               setState(() {
@@ -113,7 +113,7 @@ class _RecipeingredientState extends State<Recipeingredient> {
                   _quantityController.text, selectedUnit);
             },
           ),
-          SizedBox(width: 10),
+          SizedBox(width: 3),
           //DELETE BUTTON
           GestureDetector(
             onTap: () => widget.deleteIngredient(widget.index),

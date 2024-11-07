@@ -58,7 +58,11 @@ class _RecipesScreenState extends State<RecipesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: SizedBox.shrink()),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: SizedBox.shrink(),
+        backgroundColor: Colors.transparent,
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

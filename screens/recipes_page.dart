@@ -89,6 +89,7 @@ class _RecipesPageState extends State<RecipesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
         title: Container(
           alignment: Alignment.center,
           child: const MyText(
@@ -123,9 +124,16 @@ class _RecipesPageState extends State<RecipesPage> {
                                   ),
                                 ),
                               )
-                            : Icon(Icons.menu_book),
+                            : Icon(
+                                Icons.menu_book,
+                                color: Colors.grey.shade200,
+                              ),
                         SizedBox(width: 10),
-                        MyText(text: recipes[index].name, size: 20)
+                        MyText(
+                          text: recipes[index].name,
+                          size: 20,
+                          color: Colors.grey.shade200,
+                        )
                       ],
                     ),
                   );

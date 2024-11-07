@@ -34,21 +34,28 @@ class MyNumberField extends StatelessWidget {
       ),
       child: Container(
         height: 30,
-        child: TextField(
-          onChanged: onChanged,
-          maxLength: maxLength,
-          keyboardType: TextInputType.numberWithOptions(decimal: true),
-          controller: controller,
-          style: GoogleFonts.outfit(
-            fontSize: size ?? 16,
-            color: Colors.grey.shade400,
+        child: Theme(
+          data: ThemeData(
+              textSelectionTheme: TextSelectionThemeData(
+                  cursorColor: Colors.black,
+                  selectionColor: Colors.orange.shade100,
+                  selectionHandleColor: Colors.orange.shade400)),
+          child: TextField(
+            onChanged: onChanged,
+            maxLength: maxLength,
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
+            controller: controller,
+            style: GoogleFonts.outfit(
+              fontSize: size ?? 16,
+              color: Colors.black,
+            ),
+            decoration: InputDecoration(
+                counterText: "",
+                border: InputBorder.none,
+                hintText: hintText,
+                contentPadding: EdgeInsets.only(bottom: 15),
+                hintStyle: TextStyle(color: Colors.grey.shade400)),
           ),
-          decoration: InputDecoration(
-              counterText: "",
-              border: InputBorder.none,
-              hintText: hintText,
-              contentPadding: EdgeInsets.only(bottom: 15),
-              hintStyle: TextStyle(color: Colors.grey.shade400)),
         ),
       ),
     );

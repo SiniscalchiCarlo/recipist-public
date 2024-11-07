@@ -38,21 +38,29 @@ class MyTextField extends StatelessWidget {
       ),
       child: Container(
         height: 30,
-        child: TextField(
-          onChanged: onChanged,
-          maxLength: maxLength,
-          controller: controller,
-          style: GoogleFonts.outfit(
-            fontSize: size ?? 16,
-            color: Colors.black,
-          ),
-          decoration: InputDecoration(
+        child: Theme(
+          data: ThemeData(
+              textSelectionTheme: TextSelectionThemeData(
+                  cursorColor: Colors.black,
+                  selectionColor: Colors.orange.shade100,
+                  selectionHandleColor: Colors.orange.shade400)),
+          child: TextField(
+            onChanged: onChanged,
+            maxLength: maxLength,
+            controller: controller,
+            style: GoogleFonts.outfit(
+              fontSize: size ?? 16,
+              color: Colors.black,
+            ),
+            decoration: InputDecoration(
               counterText: "",
               border:
                   onlyLine != true ? InputBorder.none : UnderlineInputBorder(),
               hintText: hintText,
               contentPadding: EdgeInsets.only(bottom: 10),
-              hintStyle: TextStyle(color: Colors.grey.shade400)),
+              hintStyle: TextStyle(color: Colors.grey.shade400),
+            ),
+          ),
         ),
       ),
     );

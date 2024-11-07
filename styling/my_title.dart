@@ -31,19 +31,35 @@ class MyTitle extends StatelessWidget {
       ),
       child: Container(
         height: 30,
-        child: TextField(
-          onChanged: onChanged,
-          maxLength: maxLength,
-          controller: controller,
-          style: GoogleFonts.outfit(
-            fontSize: size ?? 16,
-            color: Colors.black,
-          ),
-          decoration: InputDecoration(
+        child: Theme(
+          data: ThemeData(
+              textSelectionTheme: TextSelectionThemeData(
+                  cursorColor: Colors.black,
+                  selectionColor: Colors.orange.shade100,
+                  selectionHandleColor: Colors.orange.shade400)),
+          child: TextField(
+            onChanged: onChanged,
+            maxLength: maxLength,
+            controller: controller,
+            style: GoogleFonts.outfit(
+              fontSize: size ?? 16,
+              color: Colors.black,
+            ),
+            decoration: InputDecoration(
               counterText: "",
               hintText: hintText,
               contentPadding: EdgeInsets.only(bottom: 10),
-              hintStyle: TextStyle(color: Colors.grey.shade400)),
+              hintStyle: TextStyle(color: Colors.grey.shade400),
+              focusedBorder: UnderlineInputBorder(
+                borderSide:
+                    BorderSide(color: Colors.black), // color when focused
+              ),
+              enabledBorder: UnderlineInputBorder(
+                borderSide:
+                    BorderSide(color: Colors.grey), // color when not focused
+              ),
+            ),
+          ),
         ),
       ),
     );

@@ -1,5 +1,5 @@
 import 'dart:ffi';
-
+import 'dart:ui' as ui;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -257,52 +257,48 @@ class _EditShopListState extends State<EditShopList> {
     final ScrollController _recipescroll = ScrollController();
     //getListIngredients();
     return Scaffold(
-        appBar: AppBar(
+        appBar: PreferredSize(
+          preferredSize: ui.Size.fromHeight(30.0),
+          child: AppBar(
+            backgroundColor: Colors.transparent,
             automaticallyImplyLeading: widget.isNew == true ? false : true,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                //ADD PERSON BUTTON
-                Row(
-                  children: [
-                    IconButton(
-                        onPressed: () => {shareList()},
-                        icon: Icon(
-                          Icons.person_add,
-                          size: 40,
-                          color: Colors.grey.shade700,
-                        ))
-                  ],
-                )
-              ],
-            )),
+          ),
+        ),
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Column(
             children: [
               //SHOPPING LIST NAME
-              Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                SizedBox(
-                  width: 10,
-                ),
-                Icon(
-                  Icons.receipt_long,
-                  size: 35,
-                ),
-                SizedBox(
-                  width: 5,
-                ),
-                MyTitle(
-                  controller: _nameController,
-                  maxLength: 15,
-                  size: 20,
-                  maxWidth: 150,
-                )
-              ]),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.receipt_long,
+                        size: 35,
+                      ),
+                      MyTitle(
+                        controller: _nameController,
+                        maxLength: 15,
+                        size: 20,
+                        maxWidth: 150,
+                      ),
+                    ],
+                  ),
+                  IconButton(
+                      onPressed: () => {shareList()},
+                      icon: Icon(
+                        Icons.person_add,
+                        size: 40,
+                        color: Colors.orange.shade500,
+                      ))
+                ],
+              ),
 
               //TITLE
-              SizedBox(height: 30),
-              MyText(text: "What do you want to cook?", size: 25),
+              MyText(text: "Recipes you want to cook:", size: 25),
 
               //RECIPES LIST
               Container(
@@ -368,16 +364,45 @@ class _EditShopListState extends State<EditShopList> {
               ),
 
               //AD RECEIPT BUTTON
-              Center(
-                child: MyButton(
-                    child: MyText(
-                      text: "+ Add Recipe",
-                      color: Colors.grey.shade200,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  MyButton(
+                      child: MyText(
+                        text: "+ Add Recipe",
+                        color: Colors.grey.shade200,
+                      ),
+                      onPressed: addRecipe),
+                  //REFRESH BUTTON
+                  GestureDetector(
+                    onTap: () => getListIngredients(),
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Container(
+                          margin: EdgeInsets.all(5),
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                              color: Colors.orange.shade100,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Icon(
+                            Icons.refresh,
+                            color: Colors.orange,
+                          )),
                     ),
-                    onPressed: addRecipe),
+                  ),
+                ],
               ),
-              SizedBox(height: 20),
 
+              SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    MyText(text: "Recipes ingredients:"),
+                  ],
+                ),
+              ),
               //INGREDIENTS
               Container(
                 height: 140,
@@ -405,50 +430,6 @@ class _EditShopListState extends State<EditShopList> {
 
                               return Column(
                                 children: [
-                                  //REFRESH BUTTON
-                                  index == 0
-                                      ? Row(
-                                          children: [
-                                            SizedBox(
-                                              width: 15,
-                                            ),
-                                            // MyText(
-                                            //   text: "Name of ingredient",
-                                            //   color: Colors.grey,
-                                            // ),
-                                            SizedBox(
-                                              width: 20,
-                                            ),
-                                            // MyText(
-                                            //   text: "Quantity",
-                                            //   color: Colors.grey,
-                                            // ),
-                                            SizedBox(
-                                              width: 20,
-                                            ),
-                                            GestureDetector(
-                                              onTap: () => getListIngredients(),
-                                              child: Align(
-                                                alignment:
-                                                    Alignment.centerRight,
-                                                child: Container(
-                                                    margin: EdgeInsets.all(5),
-                                                    padding: EdgeInsets.all(5),
-                                                    decoration: BoxDecoration(
-                                                        color: Colors
-                                                            .orange.shade100,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10)),
-                                                    child: Icon(
-                                                      Icons.refresh,
-                                                      color: Colors.orange,
-                                                    )),
-                                              ),
-                                            ),
-                                          ],
-                                        )
-                                      : SizedBox.shrink(),
                                   Recipeingredient(
                                     check: true,
                                     ingredient:
@@ -467,6 +448,15 @@ class _EditShopListState extends State<EditShopList> {
                 height: 15,
               ),
 
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    MyText(text: "Other items:"),
+                  ],
+                ),
+              ),
               //OTHER INGREDIENTS
               Container(
                 height: 140,
@@ -474,8 +464,9 @@ class _EditShopListState extends State<EditShopList> {
                 decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey.shade500),
                     borderRadius: BorderRadius.circular(10)),
-                child: newList.recipesIngredients.length == 0
+                child: newList.otherIngredients.length == 0
                     ? Container(
+                        width: double.infinity,
                         margin: EdgeInsets.all(5),
                         padding: const EdgeInsets.all(8.0),
                         child: MyText(
