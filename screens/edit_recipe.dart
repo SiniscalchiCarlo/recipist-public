@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_shopping_list/screens/confirm_delete_dialog.dart';
+import 'package:smart_shopping_list/screens/confirm_dialog.dart';
 import 'package:smart_shopping_list/styling/my_counter.dart';
 import 'package:smart_shopping_list/components/recipeIngredient.dart';
 import 'package:smart_shopping_list/models/Ingredient.dart';
@@ -72,11 +72,13 @@ class _EditRecipeState extends State<EditRecipe> {
         ingredients: newRecipe.ingredients,
         imagePath: selectedImage?.path,
         id: newRecipe.id); //temporary id will be changed after navigator pop.
+
     Navigator.pop(context, result);
   }
 
-  void deleteRecipe() {
+  void deleteRecipe(BuildContext dialogContext) {
     final result = "delete";
+    Navigator.pop(dialogContext, result);
     Navigator.pop(context, result);
   }
 
@@ -84,7 +86,11 @@ class _EditRecipeState extends State<EditRecipe> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return ConfirmDeleteDialog(onDelete: deleteRecipe);
+        return ConfirmDialog(
+            callBack: () => deleteRecipe(context),
+            warning: "Are you sure you want to delete this recipe?",
+            buttonText: "delete",
+            buttonColor: Colors.red);
       },
     );
   }
@@ -126,7 +132,7 @@ class _EditRecipeState extends State<EditRecipe> {
         body: SingleChildScrollView(
           child: Column(children: [
             SizedBox(
-              height: 50,
+              height: 10,
             ),
             //RECIPE TITLE AND IMAGE
             Center(

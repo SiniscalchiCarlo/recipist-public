@@ -15,6 +15,7 @@ class MyDropDown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButton<String>(
+      isDense: true,
       dropdownColor: Colors.grey.shade100,
       value: selectedValue,
       onChanged: (String? newValue) {

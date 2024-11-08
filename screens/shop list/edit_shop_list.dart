@@ -8,7 +8,7 @@ import 'package:smart_shopping_list/components/recipeIngredient.dart';
 import 'package:smart_shopping_list/models/Ingredient.dart';
 import 'package:smart_shopping_list/models/Recipe.dart';
 import 'package:smart_shopping_list/models/ShopList.dart';
-import 'package:smart_shopping_list/screens/confirm_delete_dialog.dart';
+import 'package:smart_shopping_list/screens/confirm_dialog.dart';
 import 'package:smart_shopping_list/screens/list_page.dart';
 import 'package:smart_shopping_list/screens/recipes_dialog.dart';
 import 'package:smart_shopping_list/services/firestore.dart';
@@ -82,7 +82,6 @@ class _EditShopListState extends State<EditShopList> {
     super.dispose();
   }
 
-  //reassigns the recipes to the shopping list, this way if the recipes are modified will be modifiend in the shopping list too (if you press the restore proportions button)
   void refreshRecipes() {
     for (var i = 0; i < newList.recipes.length; i++) {
       int recipeIndex =
@@ -102,7 +101,7 @@ class _EditShopListState extends State<EditShopList> {
     Navigator.pop(context, result);
   }
 
-  void deleteList() async {
+  void deleteList(BuildContext dialogContext) async {
     final result = "delete";
 
     if (newList.shared) {
@@ -111,6 +110,7 @@ class _EditShopListState extends State<EditShopList> {
       }
     }
     print("DELETE LIST");
+    Navigator.of(dialogContext).pop();
     Navigator.pop(context, result);
   }
 
@@ -118,7 +118,11 @@ class _EditShopListState extends State<EditShopList> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return ConfirmDeleteDialog(onDelete: deleteList);
+        return ConfirmDialog(
+            callBack: () => deleteList(context),
+            warning: "Are you sure you want to delete this shopping list?",
+            buttonText: "Delete",
+            buttonColor: Colors.red);
       },
     );
   }
@@ -177,25 +181,6 @@ class _EditShopListState extends State<EditShopList> {
     });
   }
 
-  void addRecipe() async {
-    final result = await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return RecipesDialog(
-          selectedRecipes: newList.recipes,
-        ); // Utilizza la nuova schermata del dialog
-      },
-    );
-    if (result != null) {
-      if (result != null) {
-        setState(() {
-          newList.recipes = result;
-        });
-        getListIngredients();
-      }
-    }
-  }
-
   void deleteIngredient(index) {
     setState(() {
       newList.recipesIngredients.removeAt(index);
@@ -237,13 +222,6 @@ class _EditShopListState extends State<EditShopList> {
     Share.share("${domain}?listId=${newList.id}");
   }
 
-  void addOtherIngredient() {
-    setState(() {
-      newList.otherIngredients
-          .add(Ingredient(name: "", quantity: "0", unit: "unit"));
-    });
-  }
-
   void deleteOtherIngredient(index) {
     setState(() {
       newList.otherIngredients.removeAt(index);
@@ -255,6 +233,54 @@ class _EditShopListState extends State<EditShopList> {
     final ScrollController _otherIngredietsScroll = ScrollController();
     final ScrollController _recipesIngredietsScroll = ScrollController();
     final ScrollController _recipescroll = ScrollController();
+
+    void addRecipe() async {
+      final result = await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return RecipesDialog(
+            selectedRecipes: newList.recipes,
+          ); // Utilizza la nuova schermata del dialog
+        },
+      );
+
+      if (result != null) {
+        setState(() {
+          newList.recipes = result;
+        });
+        getListIngredients();
+
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (_recipesIngredietsScroll.hasClients &&
+              newList.recipes.isNotEmpty) {
+            _recipesIngredietsScroll.animateTo(
+              _recipesIngredietsScroll.position.maxScrollExtent,
+              duration: Duration(milliseconds: 300),
+              curve: Curves.easeOut,
+            );
+          }
+        });
+      }
+    }
+
+    void addOtherIngredient() {
+      setState(() {
+        newList.otherIngredients
+            .add(Ingredient(name: "", quantity: "0", unit: "unit"));
+      });
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (_otherIngredietsScroll.hasClients &&
+            newList.otherIngredients.isNotEmpty) {
+          _otherIngredietsScroll.animateTo(
+            _otherIngredietsScroll.position.maxScrollExtent,
+            duration: Duration(milliseconds: 300),
+            curve: Curves.easeOut,
+          );
+        }
+      });
+    }
+
     //getListIngredients();
     return Scaffold(
         appBar: PreferredSize(
@@ -269,23 +295,25 @@ class _EditShopListState extends State<EditShopList> {
           child: Column(
             children: [
               //SHOPPING LIST NAME
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.receipt_long,
-                        size: 35,
-                      ),
-                      MyTitle(
-                        controller: _nameController,
-                        maxLength: 15,
-                        size: 20,
-                        maxWidth: 150,
-                      ),
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.receipt_long,
+                          size: 35,
+                        ),
+                        MyTitle(
+                          controller: _nameController,
+                          maxLength: 15,
+                          size: 25,
+                          maxWidth: 150,
+                        ),
+                      ],
+                    ),
                   ),
                   IconButton(
                       onPressed: () => {shareList()},
@@ -297,217 +325,270 @@ class _EditShopListState extends State<EditShopList> {
                 ],
               ),
 
-              //TITLE
-              MyText(text: "Recipes you want to cook:", size: 25),
-
               //RECIPES LIST
               Container(
-                width: double.infinity,
-                height: 100,
                 margin: EdgeInsets.symmetric(vertical: 3, horizontal: 10),
                 decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey.shade500),
                     borderRadius: BorderRadius.circular(10)),
-                child: newList.recipes.length == 0
-                    ? Container(
-                        margin: EdgeInsets.all(5),
-                        child: MyText(
-                          text: "Add the recipes you'd like to cook...",
-                          color: Colors.grey.shade400,
-                        ),
-                      )
-                    : Scrollbar(
-                        thumbVisibility: true,
-                        controller: _recipescroll,
-                        child: ListView.builder(
-                            controller: _recipescroll,
-                            itemCount: newList.recipes.length,
-                            itemBuilder: (context, index) {
-                              return Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    SizedBox(width: 5),
-                                    MyText(
-                                        text:
-                                            newList.recipes[index].recipe.name),
-                                    SizedBox(width: 20),
-                                    MyCounter(
-                                      size: 20,
-                                      onPressed: (value) {
-                                        setState(() {
-                                          newList.recipes[index].nperson =
-                                              value;
-                                        });
-                                        getListIngredients();
-                                      },
-                                      startValue:
-                                          newList.recipes[index].nperson,
-                                    ),
-                                    SizedBox(width: 20),
-                                    IconButton(
-                                      onPressed: () => deleteRecipe(index),
-                                      icon: Container(
-                                          padding: EdgeInsets.all(5),
-                                          decoration: BoxDecoration(
-                                              color: Colors.orange.shade100,
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          child: Icon(
-                                            Icons.delete,
-                                            color: Colors.orange,
-                                          )),
-                                    )
-                                  ]);
-                            }),
+                child: Column(
+                  children: [
+                    //TITLE
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          MyText(text: "Recipes you want to cook:", size: 20),
+                        ],
                       ),
-              ),
-
-              //AD RECEIPT BUTTON
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  MyButton(
-                      child: MyText(
-                        text: "+ Add Recipe",
-                        color: Colors.grey.shade200,
-                      ),
-                      onPressed: addRecipe),
-                  //REFRESH BUTTON
-                  GestureDetector(
-                    onTap: () => getListIngredients(),
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: Container(
-                          margin: EdgeInsets.all(5),
-                          padding: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                              color: Colors.orange.shade100,
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Icon(
-                            Icons.refresh,
-                            color: Colors.orange,
-                          )),
                     ),
-                  ),
-                ],
+                    //LIST
+                    Container(
+                      constraints: BoxConstraints(
+                        maxHeight: 100,
+                      ),
+                      child: newList.recipes.length == 0
+                          ? Container(
+                              margin: EdgeInsets.all(5),
+                              child: MyText(
+                                text: "Add the recipes you'd like to cook...",
+                                color: Colors.grey.shade400,
+                              ),
+                            )
+                          : Scrollbar(
+                              thumbVisibility: true,
+                              controller: _recipescroll,
+                              child: ListView.builder(
+                                  shrinkWrap: true,
+                                  controller: _recipescroll,
+                                  itemCount: newList.recipes.length,
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                      margin: EdgeInsets.only(
+                                          top: 0, left: 5, right: 0, bottom: 5),
+                                      child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            MyText(
+                                                text: newList.recipes[index]
+                                                    .recipe.name),
+                                            MyCounter(
+                                              size: 20,
+                                              onPressed: (value) {
+                                                setState(() {
+                                                  newList.recipes[index]
+                                                      .nperson = value;
+                                                });
+                                                getListIngredients();
+                                              },
+                                              startValue: newList
+                                                  .recipes[index].nperson,
+                                            ),
+                                            GestureDetector(
+                                              onTap: () => deleteRecipe(index),
+                                              child: Container(
+                                                  padding: EdgeInsets.all(5),
+                                                  decoration: BoxDecoration(
+                                                      color:
+                                                          Colors.grey.shade200,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10)),
+                                                  child: Icon(
+                                                    Icons.delete,
+                                                    color: Colors.grey.shade400,
+                                                  )),
+                                            )
+                                          ]),
+                                    );
+                                  }),
+                            ),
+                    ),
+                    //AD RECEIPT BUTTON
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        MyButton(
+                            child: MyText(
+                              text: "+ Add Recipe",
+                              color: Colors.grey.shade200,
+                            ),
+                            onPressed: addRecipe),
+                        //REFRESH BUTTON
+                      ],
+                    ),
+                    SizedBox(
+                      height: 5,
+                    )
+                  ],
+                ),
               ),
 
               SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    MyText(text: "Recipes ingredients:"),
-                  ],
-                ),
-              ),
-              //INGREDIENTS
+
+              //ALL SHOPPING LIST ITEMS
               Container(
-                height: 140,
                 margin: EdgeInsets.symmetric(vertical: 3, horizontal: 10),
                 decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey.shade500),
                     borderRadius: BorderRadius.circular(10)),
-                child: newList.recipesIngredients.length == 0
-                    ? Container(
-                        margin: EdgeInsets.all(5),
-                        child: MyText(
-                          text:
-                              "Ingredients for your recipes will appear here automatically...",
-                          color: Colors.grey.shade400,
-                        ),
-                      )
-                    : Scrollbar(
-                        thumbVisibility: true,
-                        controller: _recipesIngredietsScroll,
-                        child: ListView.builder(
-                            controller: _recipesIngredietsScroll,
-                            itemCount: newList.recipesIngredients.length,
-                            itemBuilder: (context, index) {
-                              //RECIPE INGREDIENTS
-
-                              return Column(
-                                children: [
-                                  Recipeingredient(
-                                    check: true,
-                                    ingredient:
-                                        newList.recipesIngredients[index],
-                                    onChange: onChange,
-                                    deleteIngredient: deleteIngredient,
-                                    index: index,
-                                  ),
-                                ],
-                              );
-                            }),
-                      ),
-              ),
-
-              SizedBox(
-                height: 15,
-              ),
-
-              Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                child: Column(
                   children: [
-                    MyText(text: "Other items:"),
+                    //TITLE+REFRESH BUTTON
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          MyText(text: "Recipes ingredients:", size: 20),
+
+                          //REFRESH BUTTON
+                          GestureDetector(
+                            onTap: () => getListIngredients(),
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Container(
+                                  margin: EdgeInsets.all(5),
+                                  padding: EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                      color: Colors.orange.shade100,
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Icon(
+                                    Icons.refresh,
+                                    color: Colors.orange,
+                                  )),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    //RECIPES INGREDIENTS
+                    Container(
+                      constraints: BoxConstraints(
+                        maxHeight: 150,
+                      ),
+                      child: newList.recipesIngredients.length == 0
+                          ? Container(
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: 5, vertical: 0),
+                              child: MyText(
+                                text:
+                                    "Ingredients for your recipes will appear here automatically...",
+                                color: Colors.grey.shade400,
+                              ),
+                            )
+                          : Scrollbar(
+                              thumbVisibility: true,
+                              controller: _recipesIngredietsScroll,
+                              child: ListView.builder(
+                                  shrinkWrap: true,
+                                  controller: _recipesIngredietsScroll,
+                                  itemCount: newList.recipesIngredients.length,
+                                  itemBuilder: (context, index) {
+                                    //RECIPE INGREDIENTS
+
+                                    return Column(
+                                      children: [
+                                        Recipeingredient(
+                                          check: true,
+                                          ingredient:
+                                              newList.recipesIngredients[index],
+                                          onChange: onChange,
+                                          deleteIngredient: deleteIngredient,
+                                          index: index,
+                                        ),
+                                      ],
+                                    );
+                                  }),
+                            ),
+                    ),
+                    // Container(
+                    //     margin: EdgeInsets.symmetric(horizontal: 5),
+                    //     height: 2,
+                    //     width: double.infinity,
+                    //     decoration: BoxDecoration(
+                    //         border: Border.all(color: Colors.grey.shade500),
+                    //         borderRadius: BorderRadius.circular(10))),
+
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          MyText(text: "Other items:", size: 20),
+                        ],
+                      ),
+                    ),
+
+                    //OTHER ITEMS
+                    Container(
+                      constraints: BoxConstraints(
+                        maxHeight: 150,
+                      ),
+                      child: newList.otherIngredients.length == 0
+                          ? Container(
+                              width: double.infinity,
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: 5, vertical: 0),
+                              padding: const EdgeInsets.all(8.0),
+                              child: MyText(
+                                text: "Add other items you need...",
+                                color: Colors.grey.shade400,
+                              ),
+                            )
+                          : Scrollbar(
+                              thumbVisibility: true,
+                              controller: _otherIngredietsScroll,
+                              child: ListView.builder(
+                                  controller: _otherIngredietsScroll,
+                                  shrinkWrap:
+                                      true, // This ensures the inner ListView takes only the space it needs
+                                  //physics: NeverScrollableScrollPhysics(),
+                                  itemCount:
+                                      newList.otherIngredients.length + 1,
+                                  itemBuilder: (context, index) {
+                                    //OTHER INGREDIENTS
+                                    if (index <
+                                        newList.otherIngredients.length) {
+                                      return Recipeingredient(
+                                        check: true,
+                                        ingredient:
+                                            newList.otherIngredients[index],
+                                        onChange: onChange,
+                                        deleteIngredient: deleteOtherIngredient,
+                                        index: index,
+                                      );
+                                    }
+                                  }),
+                            ),
+                    ),
+
+                    SizedBox(
+                      height: 5,
+                    ),
+
+                    //ADD OTHER OBJECTS
+                    MyButton(
+                        child: MyText(
+                          text: "+ Add Item",
+                          color: Colors.grey.shade200,
+                        ),
+                        onPressed: addOtherIngredient),
+                    SizedBox(
+                      height: 5,
+                    ),
                   ],
                 ),
               ),
-              //OTHER INGREDIENTS
-              Container(
-                height: 140,
-                margin: EdgeInsets.symmetric(vertical: 3, horizontal: 10),
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey.shade500),
-                    borderRadius: BorderRadius.circular(10)),
-                child: newList.otherIngredients.length == 0
-                    ? Container(
-                        width: double.infinity,
-                        margin: EdgeInsets.all(5),
-                        padding: const EdgeInsets.all(8.0),
-                        child: MyText(
-                          text: "Add other items you need...",
-                          color: Colors.grey.shade400,
-                        ),
-                      )
-                    : Scrollbar(
-                        thumbVisibility: true,
-                        controller: _otherIngredietsScroll,
-                        child: ListView.builder(
-                            controller: _otherIngredietsScroll,
-                            shrinkWrap:
-                                true, // This ensures the inner ListView takes only the space it needs
-                            //physics: NeverScrollableScrollPhysics(),
-                            itemCount: newList.otherIngredients.length + 1,
-                            itemBuilder: (context, index) {
-                              //OTHER INGREDIENTS
-                              if (index < newList.otherIngredients.length) {
-                                return Recipeingredient(
-                                  check: true,
-                                  ingredient: newList.otherIngredients[index],
-                                  onChange: onChange,
-                                  deleteIngredient: deleteOtherIngredient,
-                                  index: index,
-                                );
-                              }
-                            }),
-                      ),
-              ),
-
-              //ADD OTHER OBJECTS
-              MyButton(
-                  child: MyText(
-                    text: "+ Add Item",
-                    color: Colors.grey.shade200,
-                  ),
-                  onPressed: addOtherIngredient),
 
               SizedBox(
-                height: 20,
+                height: 10,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

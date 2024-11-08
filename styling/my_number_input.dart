@@ -12,6 +12,7 @@ class MyNumberField extends StatelessWidget {
   final Function(String)? onChanged;
   final double? maxWidth;
   final String? hintText;
+  final bool? onlyLine;
   const MyNumberField(
       {super.key,
       required this.controller,
@@ -19,15 +20,18 @@ class MyNumberField extends StatelessWidget {
       this.size,
       this.onChanged,
       this.maxWidth,
-      this.hintText});
+      this.hintText,
+      this.onlyLine});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(left: 4),
-      decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.shade500),
-          borderRadius: BorderRadius.circular(10)),
+      decoration: onlyLine != true
+          ? BoxDecoration(
+              border: Border.all(color: Colors.grey.shade500),
+              borderRadius: BorderRadius.circular(10))
+          : null,
       constraints: BoxConstraints(
         maxWidth: maxWidth ??
             (maxLength * (size ?? 18) * 0.8), // Set the maximum width here
@@ -51,7 +55,9 @@ class MyNumberField extends StatelessWidget {
             ),
             decoration: InputDecoration(
                 counterText: "",
-                border: InputBorder.none,
+                border: onlyLine != true
+                    ? InputBorder.none
+                    : UnderlineInputBorder(),
                 hintText: hintText,
                 contentPadding: EdgeInsets.only(bottom: 15),
                 hintStyle: TextStyle(color: Colors.grey.shade400)),

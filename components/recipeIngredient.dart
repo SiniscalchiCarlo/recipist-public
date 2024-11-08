@@ -63,7 +63,7 @@ class _RecipeingredientState extends State<Recipeingredient> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 0, left: 5, right: 0, bottom: 0),
+      margin: EdgeInsets.only(top: 5, left: 5, right: 0, bottom: 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -84,6 +84,7 @@ class _RecipeingredientState extends State<Recipeingredient> {
               maxLength: 20,
               maxWidth: 120,
               hintText: "Ingredient",
+              onlyLine: false,
               onChanged: (value) => widget.onChange(
                   widget.ingredient,
                   _nameController.text,
@@ -93,6 +94,7 @@ class _RecipeingredientState extends State<Recipeingredient> {
           //INGREDIENT QUANTIY
           MyNumberField(
             controller: _quantityController,
+            onlyLine: false,
             maxLength: 4,
             onChanged: (value) => widget.onChange(
                 widget.ingredient,
@@ -123,10 +125,8 @@ class _RecipeingredientState extends State<Recipeingredient> {
                 decoration: BoxDecoration(
                     color: Colors.grey.shade200,
                     borderRadius: BorderRadius.circular(10)),
-                child: Icon(
-                  Icons.delete,
-                  color: Colors.grey.shade400,
-                )),
+                child:
+                    Icon(Icons.delete, color: Colors.grey.shade400, size: 25)),
           )
         ],
       ),
