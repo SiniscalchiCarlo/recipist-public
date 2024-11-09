@@ -29,6 +29,7 @@ class EditRecipe extends StatefulWidget {
 class _EditRecipeState extends State<EditRecipe> {
   late TextEditingController _nameController;
   late TextEditingController _notesController;
+  final ScrollController _ingredietsScrollController = ScrollController();
   late Recipe newRecipe;
   late File? selectedImage;
 
@@ -47,6 +48,7 @@ class _EditRecipeState extends State<EditRecipe> {
   void dispose() {
     _nameController.dispose();
     _notesController.dispose();
+    _ingredietsScrollController.dispose();
     super.dispose();
   }
 
@@ -108,18 +110,17 @@ class _EditRecipeState extends State<EditRecipe> {
     });
   }
 
+  Future PickImageFromCamera() async {
+    final returnedImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (returnedImage == null) return;
+    setState(() {
+      selectedImage = File(returnedImage.path);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final ScrollController _ingredietsScrollController = ScrollController();
-    Future PickImageFromCamera() async {
-      final returnedImage =
-          await ImagePicker().pickImage(source: ImageSource.gallery);
-      if (returnedImage == null) return;
-      setState(() {
-        selectedImage = File(returnedImage.path);
-      });
-    }
-
     return Scaffold(
         appBar: PreferredSize(
           preferredSize: ui.Size.fromHeight(30.0),

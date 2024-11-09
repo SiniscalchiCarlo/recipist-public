@@ -95,7 +95,8 @@ class _RecipeingredientState extends State<Recipeingredient> {
           MyNumberField(
             controller: _quantityController,
             onlyLine: false,
-            maxLength: 4,
+            maxWidth: 50,
+            maxLength: 20,
             onChanged: (value) => widget.onChange(
                 widget.ingredient,
                 _nameController.text,

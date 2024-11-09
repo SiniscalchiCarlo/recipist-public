@@ -46,11 +46,24 @@ class EditShopList extends StatefulWidget {
 class _EditShopListState extends State<EditShopList> {
   late ShopList newList;
   late TextEditingController _nameController;
+  final ScrollController _otherIngredietsScroll = ScrollController();
+  final ScrollController _recipesIngredietsScroll = ScrollController();
+  final ScrollController _recipescroll = ScrollController();
+
   final CollectionReference listsDb =
       FirebaseFirestore.instance.collection('shopping_lists');
   List<Recipe> myRecipes =
       Hive.box<Recipe>("recipes").values.cast<Recipe>().toList();
   String? deviceId;
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _otherIngredietsScroll.dispose();
+    _recipesIngredietsScroll.dispose();
+    _recipescroll.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -74,12 +87,6 @@ class _EditShopListState extends State<EditShopList> {
     if (newList.recipes.isNotEmpty) {
       refreshRecipes();
     }
-  }
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    super.dispose();
   }
 
   void refreshRecipes() {
@@ -230,10 +237,6 @@ class _EditShopListState extends State<EditShopList> {
 
   @override
   Widget build(BuildContext context) {
-    final ScrollController _otherIngredietsScroll = ScrollController();
-    final ScrollController _recipesIngredietsScroll = ScrollController();
-    final ScrollController _recipescroll = ScrollController();
-
     void addRecipe() async {
       final result = await showDialog(
         context: context,
