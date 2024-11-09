@@ -15,40 +15,39 @@ class RecipesDialog extends StatefulWidget {
 }
 
 class _RecipesDialogState extends State<RecipesDialog> {
-  late List<ListRecipe> selectedRecipes;
   List<int> selectedIndexes = [];
   List<Recipe> recipes =
       Hive.box<Recipe>("recipes").values.cast<Recipe>().toList();
+  late List<bool> _isChecked;
 
   @override
   void initState() {
     super.initState();
-    selectedRecipes = widget.selectedRecipes;
+    _isChecked = List<bool>.filled(recipes.length, false);
   }
 
   void saveRecipes() {
-    Navigator.pop(context, selectedRecipes);
+    Navigator.pop(context, widget.selectedRecipes);
   }
 
-  void checkRecipe(index) {
+  void checkRecipe(value, index) {
     print("INDEX $index");
 
     ListRecipe lr = ListRecipe(recipe: recipes[index], nperson: 1);
-    if (selectedIndexes.contains(index)) {
-      setState(() {
-        selectedIndexes.remove(index);
-        selectedRecipes.remove(lr);
-        print("REMOVE RECIPE $lr");
-      });
+    _isChecked[index] = value ?? false;
+    if (_isChecked[index]) {
+      // Add only if it does not already exist
+      if (!widget.selectedRecipes
+          .any((element) => element.recipe.name == lr.recipe.name)) {
+        widget.selectedRecipes.add(lr);
+      }
     } else {
-      setState(() {
-        print("ADD RECIPE $lr");
-        selectedIndexes.add(index);
-        selectedRecipes.add(lr);
-      });
+      // Remove based on content
+      widget.selectedRecipes
+          .removeWhere((element) => element.recipe.name == lr.recipe.name);
     }
 
-    for (var lr in selectedRecipes) {
+    for (var lr in widget.selectedRecipes) {
       printWarning(lr.recipe.name);
     }
   }
@@ -57,7 +56,7 @@ class _RecipesDialogState extends State<RecipesDialog> {
   Widget build(BuildContext context) {
     //i get a list of the names of recipes (selected by the user before opening the dialog
     List<String> names =
-        selectedRecipes.map((value) => value.recipe.name).toList();
+        widget.selectedRecipes.map((value) => value.recipe.name).toList();
 
     return AlertDialog(
       content: Container(
@@ -71,7 +70,7 @@ class _RecipesDialogState extends State<RecipesDialog> {
                   MyCheckBok(
                       initialValue:
                           names.contains(recipes[index].name) ? true : false,
-                      onChanged: (value) => checkRecipe(index)),
+                      onChanged: (value) => checkRecipe(value, index)),
                   MyText(text: recipes[index].name)
                 ],
               );
